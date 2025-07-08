@@ -1,5 +1,13 @@
-<h2>Subir archivo</h2>
-<form class="upload-form">
-  <input type="file" (change)="onFileSelected($event)" />
-  <button type="button" (click)="onUpload()">Subir</button>
-</form>
+<div class="custom-form">
+  <h2>Subir archivo CSV</h2>
+
+  <form class="upload-form">
+    <input type="file" (change)="onFileSelected($event)" />
+    <button type="button" (click)="onUpload()">Subir</button>
+  </form>
+
+  <div class="file-info" *ngIf="selectedFile">
+    <h3>Archivo seleccionado:</h3>
+    <p>{{ selectedFile.name }}</p>
+  </div>
+</div>

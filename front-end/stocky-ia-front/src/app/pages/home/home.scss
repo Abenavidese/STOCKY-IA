@@ -1,9 +1,8 @@
-.home-layout {
-  display: flex;
-}
-
-.home-content {
-  margin-left: 220px;
-  padding: 2rem;
-  width: calc(100% - 220px);
+:host ::ng-deep .main-content {
+  margin-left: 250px; 
+  padding: 1.5rem;
+  padding-top: 60px;
+  min-height: calc(100vh - 60px);
+  background-color: #ffffff;
+  
 }
