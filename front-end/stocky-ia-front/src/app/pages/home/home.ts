@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { Sidebar } from './sidebar/sidebar';
 import { Topbar } from './topbar/topbar';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [Sidebar, Topbar],
+  imports: [CommonModule, RouterModule, Sidebar, Topbar],
   templateUrl: './home.html',
-  styleUrls: ['./home.scss']
+  styleUrl: './home.scss'
 })
 export class Home {}

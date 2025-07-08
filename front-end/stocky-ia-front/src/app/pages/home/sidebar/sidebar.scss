@@ -3,6 +3,19 @@
   background-color: #2e3b4e;
   color: white;
   padding: 1rem;
+  height: 100vh; 
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  h2 {
+    margin-top: 0;
+  }
+
+  a.active {
+    font-weight: bold;
+    color: #2c3e50;
+  }
 
   ul {
     list-style: none;
