@@ -3,11 +3,22 @@
 
   <form class="upload-form">
     <input type="file" (change)="onFileSelected($event)" />
-    <button type="button" (click)="onUpload()">Subir</button>
+    <button type="button" (click)="onUpload()" [disabled]="!selectedFile">Subir y entrenar</button>
   </form>
 
   <div class="file-info" *ngIf="selectedFile">
     <h3>Archivo seleccionado:</h3>
     <p>{{ selectedFile.name }}</p>
+  </div>
+
+  <div *ngIf="status" class="status">
+    <p><strong>Estado:</strong> {{ status }}</p>
+    <p *ngIf="status === 'SUCCESS'" style="color: green;">✅ Entrenamiento completado</p>
+    <p *ngIf="status === 'FAILURE'" style="color: red;">❌ Error en el entrenamiento</p>
+  </div>
+
+  <div *ngIf="result">
+    <h3>Resultado:</h3>
+    <pre>{{ result | json }}</pre>
   </div>
 </div>

@@ -55,6 +55,11 @@ h2 {
     &:hover {
       background-color: #a5c3ac;
     }
+
+    &:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
   }
 }
 
@@ -75,4 +80,33 @@ h2 {
     font-weight: 500;
     color: #222;
   }
+}
+
+.status {
+  margin-top: 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+
+  p {
+    margin: 0.5rem 0;
+  }
+
+  .success {
+    color: green;
+  }
+
+  .failure {
+    color: red;
+  }
+}
+
+pre {
+  background-color: #fafafa;
+  padding: 1rem;
+  border-radius: 1rem;
+  margin-top: 1rem;
+  text-align: left;
+  white-space: pre-wrap;
+  word-break: break-word;
+  box-shadow: inset 2px 2px 5px #d1d9de, inset -2px -2px 5px #ffffff;
 }
