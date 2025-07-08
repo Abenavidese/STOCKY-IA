@@ -13,3 +13,4 @@ uploads/
 
 # Frontend de prueba
 front-end/
+!/front-end/README.md
