@@ -1,0 +1,15 @@
+# Python cache
+**/__pycache__/
+**/*.pyc
+
+# Entornos virtuales
+**/venv/
+
+# Archivos temporales
+start_backend.bat
+
+# Archivos de cargas
+uploads/
+
+# Frontend de prueba
+front-end/
