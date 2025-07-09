@@ -1,8 +1,66 @@
-<div class="login">
-  <form class="custom-form" (submit)="goToHome(); $event.preventDefault()">
-    <h1>Login</h1>
-    <input type="email" name="email" placeholder="Email" required />
-    <input type="password" name="password" placeholder="Password" required />
-    <button type="submit">Log in</button>
-  </form>
+<div class="container" [class.active]="isRegisterMode">
+  <div class="form-box login">
+    <form (submit)="login($event)">
+      <h1>Inicia Sesión</h1>
+      <div class="input-box">
+        <input type="text" placeholder="Usuario" required />
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Contraseña" required />
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+      <div class="forgot-link">
+        <a href="#">¿Olvidaste tu contraseña?</a>
+      </div>
+      <button type="submit" class="btn">Inicia Sesión</button>
+      <p>o inicia sesión con plataformas sociales</p>
+      <div class="social-icons">
+        <a href="#"><i class='bx bxl-google'></i></a>
+        <a href="#"><i class='bx bxl-facebook'></i></a>
+        <a href="#"><i class='bx bxl-github'></i></a>
+        <a href="#"><i class='bx bxl-linkedin'></i></a>
+      </div>
+    </form>
+  </div>
+
+  <div class="form-box register">
+    <form (submit)="register($event)">
+      <h1>Registrarse</h1>
+      <div class="input-box">
+        <input type="text" placeholder="Usuario" required />
+        <i class='bx bxs-user'></i>
+      </div>
+      <div class="input-box">
+        <input type="email" placeholder="Email" required />
+        <i class='bx bxs-envelope'></i>
+      </div>
+      <div class="input-box">
+        <input type="password" placeholder="Contraseña" required />
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+      <button type="submit" class="btn">Registrarse</button>
+      <p>o regístrate con redes sociales</p>
+      <div class="social-icons">
+        <a href="#"><i class='bx bxl-google'></i></a>
+        <a href="#"><i class='bx bxl-facebook'></i></a>
+        <a href="#"><i class='bx bxl-github'></i></a>
+        <a href="#"><i class='bx bxl-linkedin'></i></a>
+      </div>
+    </form>
+  </div>
+
+  <div class="toggle-box">
+    <div class="toggle-panel toggle-left">
+      <h1>¡Hola, bienvenido!</h1>
+      <p>¿No tienes una cuenta?</p>
+      <button class="btn" (click)="toggleRegister(true)">Regístrate</button>
+    </div>
+
+    <div class="toggle-panel toggle-right">
+      <h1>¡Bienvenido de nuevo!</h1>
+      <p>¿Ya tienes una cuenta?</p>
+      <button class="btn" (click)="toggleRegister(false)">Inicia Sesión</button>
+    </div>
+  </div>
 </div>

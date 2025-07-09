@@ -10,7 +10,20 @@ import { Router } from '@angular/router';
 export class Login {
   constructor(private router: Router) {}
 
-  goToHome() {
-      this.router.navigate(['/home']);
+  isRegisterMode = false;
+
+  toggleRegister(register: boolean) {
+    this.isRegisterMode = register;
+  }
+
+  login(event: Event) {
+    event.preventDefault();
+    this.router.navigate(['/home']);
+  }
+
+  register(event: Event) {
+    event.preventDefault();
+    alert('Registro exitoso (aquí puedes integrar lógica)');
+    this.toggleRegister(false);
   }
 }
