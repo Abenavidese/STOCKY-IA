@@ -4,14 +4,18 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-datasets',
+  standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './datasets.html',
-  styleUrl: './datasets.scss'
+  styleUrls: ['./datasets.scss']
 })
 export class Datasets {
-
   selectedFile: File | null = null;
   previewData: string[][] = [];
+
+  productId: string = '';
+  fecha: string = '';
+  resultado: string = '';
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -34,6 +38,15 @@ export class Datasets {
     if (this.selectedFile) {
       console.log('Subiendo archivo:', this.selectedFile.name);
       // Aquí irá la lógica real de subida al backend cuando se implemente
+    }
+  }
+
+  onPredict() {
+    if (this.productId && this.fecha) {
+      this.resultado = `Predicción generada para el producto ${this.productId} en la fecha ${this.fecha}`;
+      console.log('Ejecutando predicción con:', this.productId, this.fecha);
+    } else {
+      this.resultado = 'Por favor, ingresa ID y fecha válidos.';
     }
   }
 }
