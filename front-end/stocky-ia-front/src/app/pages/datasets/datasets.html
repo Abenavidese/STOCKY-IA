@@ -22,3 +22,30 @@
     <pre>{{ result | json }}</pre>
   </div>
 </div>
+
+<div class="custom-form">
+  <h2>Predicción de producto</h2>
+
+  <form (submit)="onPredict(); $event.preventDefault()">
+    <input
+      type="text"
+      placeholder="ID del producto"
+      [(ngModel)]="productId"
+      name="productId"
+      required
+    />
+    <input
+      type="text"
+      placeholder="Fecha (YYYY-MM-DD)"
+      [(ngModel)]="fecha"
+      name="fecha"
+      required
+    />
+    <button type="submit">Predecir</button>
+  </form>
+</div>
+
+<div class="file-info" *ngIf="resultado">
+  <h3>Resultado de la predicción:</h3>
+  <p>{{ resultado }}</p>
+</div>

@@ -8,7 +8,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http'; // ✅ Impo
   standalone: true,
   imports: [CommonModule, FormsModule, HttpClientModule], // ✅ Agrega aquí
   templateUrl: './datasets.html',
-  styleUrl: './datasets.scss'
+  styleUrls: ['./datasets.scss']
 })
 export class Datasets {
   selectedFile: File | null = null;
