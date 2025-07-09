@@ -2,8 +2,8 @@
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from api.internal_controller import router as internal_router
-
+from api.internal.internal_controller import router as internal_router
+from api.train import router as train_router
 app = FastAPI(title="Backend del Modelo de IA")
 
 # Habilita CORS si el backend general o frontend hacen llamadas
@@ -17,6 +17,9 @@ app.add_middleware(
 
 # Monta los endpoints internos
 app.include_router(internal_router, prefix="/internal")
+
+app.include_router(train_router, prefix="/api/train", tags=["Training"])
+
 
 @app.get("/health")
 def health_check():
