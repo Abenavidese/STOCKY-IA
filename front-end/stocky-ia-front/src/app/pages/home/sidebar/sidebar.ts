@@ -9,5 +9,9 @@ imports: [CommonModule, RouterModule],
   styleUrl: './sidebar.scss'
 })
 export class Sidebar {
+  isClosed = false;
 
+  toggleSidebar() {
+    this.isClosed = !this.isClosed;
+  }
 }
