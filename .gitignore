@@ -1,19 +1,11 @@
 # Cache de Python
 __pycache__/
-<<<<<<< HEAD
-=======
 # Cache de Python
 __pycache__/
->>>>>>> main
 **/__pycache__/
 *.pyc
 *.pyo
 *.pyd
-<<<<<<< HEAD
-**/*.pyc
-**/*.pyo
-**/*.pyd
-=======
 *.pyc
 *.pyo
 *.pyd
@@ -22,7 +14,6 @@ __pycache__/
 **/*.pyd
 **/*.pyo
 **/*.pyd
->>>>>>> main
 
 # Entornos virtuales
 venv/
@@ -42,6 +33,7 @@ venvModel
 .env
 .env.*
 
+back-chat/back-chat
 # Scripts o archivos temporales
 start_backend.bat
 

@@ -1,9 +1,14 @@
 from openai import OpenAI
 import os
 import logging
+from dotenv import load_dotenv
+
+# Cargar las variables de entorno desde el archivo .env
+load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+# Obtener la clave de API desde las variables de entorno
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     logger.error("OPENAI_API_KEY no está configurada")
