@@ -1,0 +1,22 @@
+[
+    {
+        "productId": "12",
+        "productName": "licor",
+        "message": "como pudo usar esto?"
+    },
+    {
+        "productId": "23",
+        "productName": "licor",
+        "message": "hola como estas"
+    },
+    {
+        "productId": "23",
+        "productName": "carne",
+        "message": "dasdas"
+    },
+    {
+        "productId": "1212",
+        "productName": "12",
+        "message": "1212"
+    }
+]
