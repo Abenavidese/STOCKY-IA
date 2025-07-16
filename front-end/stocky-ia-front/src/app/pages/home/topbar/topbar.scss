@@ -17,3 +17,18 @@
   border-bottom-left-radius: 15px;
   border-bottom-right-radius: 15px;
 }
+
+.logout-btn {
+  background-color: #ffffff22;
+  color: white;
+  border: 1px solid white;
+  padding: 0.4rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #ffffff44;
+  }
+}

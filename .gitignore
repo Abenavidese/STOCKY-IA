@@ -52,7 +52,6 @@ temp_downloads/
 
 # Ignorar frontend compilado
 # Ignorar frontend compilado
-front-end/
 !/front-end/README.md
 back-model/back-model/*
 back-entrenamiento/back-entrenamiento/*
