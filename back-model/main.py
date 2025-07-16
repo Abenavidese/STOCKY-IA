@@ -9,6 +9,7 @@ from api.routes_chat import router as chat_router
 from api.router_user import router as user_router
 from api.router_products import router as product_router
 from fastapi.staticfiles import StaticFiles
+from api.prediction_router import router as prediction_router
 import os
 import json
 
@@ -38,6 +39,8 @@ app.include_router(download_router, prefix="/api/datasets", tags=["download"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(user_router, prefix="/user", tags=["User"])
 app.include_router(product_router, prefix="/api")
+app.include_router(prediction_router, prefix="/api", tags=["Prediction Reports"])
+
 
 
 UPLOAD_DIR = os.path.abspath("uploads")

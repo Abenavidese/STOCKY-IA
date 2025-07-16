@@ -16,8 +16,8 @@ export class Datasets {
   status: string | null = null;
   result: any = null;
 
-  // Nuevas propiedades para predicción
-  productId: string = '';
+  // Propiedades para predicción
+  productId: string = ''; // Este será tu user_id
   productName: string = ''; 
   fecha: string = '';
   resultado: string = '';
@@ -36,12 +36,64 @@ export class Datasets {
 
   constructor(private http: HttpClient) {}
 
-  // Método para manejar el archivo seleccionado
+  // --- MÉTODO onPredict() ACTUALIZADO ---
+  onPredict() {
+    // Usaremos this.productId como el user_id
+    if (this.productId && this.fecha) {
+      this.resultado = 'Generando y descargando reporte...'; // Mensaje de espera para el usuario
+
+      const userId = this.productId;
+      const reportDate = this.fecha;
+      const backendUrl = 'http://127.0.0.1:8000'; // URL de tu Backend General
+
+      this.http.get(`${backendUrl}/api/report/download/${userId}/${reportDate}`, {
+        responseType: 'blob' // MUY IMPORTANTE: para recibir un archivo binario
+      }).subscribe({
+        next: (blob) => {
+          // 1. Crear un enlace <a> en memoria
+          const a = document.createElement('a');
+          const objectUrl = URL.createObjectURL(blob);
+          
+          // 2. Apuntar el enlace al archivo Blob y darle un nombre de descarga
+          a.href = objectUrl;
+          a.download = `reporte_${userId}_${reportDate}.pdf`;
+          
+          // 3. Simular un clic en el enlace para iniciar la descarga
+          a.click();
+          
+          // 4. Limpiar la URL del objeto para liberar memoria
+          URL.revokeObjectURL(objectUrl);
+
+          this.resultado = 'Reporte descargado con éxito.';
+          console.log('Descarga completada.');
+        },
+        error: (err) => {
+          console.error('Error al descargar el reporte:', err);
+          // Intenta leer el mensaje de error específico del backend
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const errorObj = JSON.parse(reader.result as string);
+              this.resultado = `Error: ${errorObj.detail || 'Ocurrió un error en el servidor.'}`;
+            } catch (e) {
+              this.resultado = `Error al procesar la respuesta del servidor. Código: ${err.status}`;
+            }
+          };
+          reader.readAsText(err.error);
+        }
+      });
+
+    } else {
+      this.resultado = 'Por favor, ingresa un ID de usuario y una fecha válida.';
+    }
+  }
+
+  // --- El resto de tus métodos (sin cambios) ---
+
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       this.selectedFile = input.files[0];
-
       const reader = new FileReader();
       reader.onload = (e: ProgressEvent<FileReader>) => {
         const text = e.target?.result as string;
@@ -52,13 +104,11 @@ export class Datasets {
     }
   }
 
-  // Método para cargar el archivo y enviar al backend
   onUpload() {
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
-      formData.append('user_id', '2');
-
+      formData.append('user_id', '2'); // O usa this.productId si aplica
       this.http.post<{ task_id: string }>('http://127.0.0.1:8000/api/datasets/upload', formData)
         .subscribe({
           next: (res) => {
@@ -71,16 +121,6 @@ export class Datasets {
             this.status = 'FAILURE';
           }
         });
-    }
-  }
-
-  // Método para hacer la predicción
-  onPredict() {
-    if (this.productId && this.fecha) {
-      this.resultado = `Predicción generada para el producto ${this.productId} en la fecha ${this.fecha}`;
-      console.log('Predicción ejecutada:', this.resultado);
-    } else {
-      this.resultado = 'Por favor, ingresa un ID de producto y una fecha válida.';
     }
   }
 
@@ -207,7 +247,6 @@ export class Datasets {
       });
   }
 
-  // Métodos para hacer el chat movible
   startDrag(event: MouseEvent | TouchEvent) {
     this.isDragging = true;
     if (event instanceof MouseEvent) {
@@ -238,7 +277,6 @@ export class Datasets {
     this.isDragging = false;
   }
 
-  // Función para cerrar el chat
   toggleChat() {
     const chatElement = document.querySelector('.chat');
     if (chatElement) {
