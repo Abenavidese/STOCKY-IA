@@ -7,7 +7,6 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from '@angular/fire/auth';
-
 @Component({
   selector: 'app-login',
   standalone: true,
@@ -117,4 +116,6 @@ export class Login {
       input.dispatchEvent(new Event('blur'));
     });
   }
+
+
 }

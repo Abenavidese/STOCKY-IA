@@ -33,28 +33,13 @@ venvModel
 .env
 .env.*
 
-# Scripts o archivos temporales
-# Archivos temporales y de entorno
-*.log
-*.tmp
-*.bak
-.DS_Store
-.env
-.env.*
-
+back-chat/back-chat
 # Scripts o archivos temporales
 start_backend.bat
 
 # Archivos de carga
-# Archivos de carga
 uploads/
 temp_downloads/
-temp_downloads/
 
-# Ignorar frontend compilado
-# Ignorar frontend compilado
 !/front-end/README.md
 back-model/back-model/*
-back-entrenamiento/back-entrenamiento/*
-back-model/back-model/*
-back-entrenamiento/back-entrenamiento
