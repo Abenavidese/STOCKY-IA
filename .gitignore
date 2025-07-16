@@ -1,11 +1,19 @@
 # Cache de Python
 __pycache__/
+<<<<<<< HEAD
+=======
 # Cache de Python
 __pycache__/
+>>>>>>> main
 **/__pycache__/
 *.pyc
 *.pyo
 *.pyd
+<<<<<<< HEAD
+**/*.pyc
+**/*.pyo
+**/*.pyd
+=======
 *.pyc
 *.pyo
 *.pyd
@@ -14,6 +22,7 @@ __pycache__/
 **/*.pyd
 **/*.pyo
 **/*.pyd
+>>>>>>> main
 
 # Entornos virtuales
 venv/
@@ -34,28 +43,13 @@ venvModel
 .env.*
 
 # Scripts o archivos temporales
-# Archivos temporales y de entorno
-*.log
-*.tmp
-*.bak
-.DS_Store
-.env
-.env.*
-
-# Scripts o archivos temporales
 start_backend.bat
 
 # Archivos de carga
-# Archivos de carga
 uploads/
 temp_downloads/
-temp_downloads/
 
-# Ignorar frontend compilado
 # Ignorar frontend compilado
 front-end/
 !/front-end/README.md
 back-model/back-model/*
-back-entrenamiento/back-entrenamiento/*
-back-model/back-model/*
-back-entrenamiento/back-entrenamiento

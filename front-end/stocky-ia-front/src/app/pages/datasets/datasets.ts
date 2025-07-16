@@ -31,7 +31,8 @@ export class Datasets {
 
   // Propiedades del chat
   chatMessage: string = '';
-  messages: string[] = [];
+  // Ahora mensajes como objetos { sender: 'user'|'assistant'|'system', text: string }
+  messages: { sender: string; text: string }[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -143,26 +144,106 @@ export class Datasets {
     }, 3000);
   }
 
-  sendMessage() {
-    if (this.productId.trim() && this.productName.trim() && this.chatMessage.trim()) {
-      const messageData = {
-        productId: this.productId,
-        productName: this.productName,
-        message: this.chatMessage,
-      };
-      this.messages.push(`Producto ${this.productName} (ID: ${this.productId}): ${this.chatMessage}`);
-      this.chatMessage = '';
-      this.sendToApi(messageData);
-    } else {
-      this.messages.push('Por favor, ingresa todos los campos (ID, nombre del producto y mensaje).');
+  loadConversation() {
+    const threadId = localStorage.getItem('thread_id');
+    if (threadId) {
+      this.http.get<any>(`http://127.0.0.1:8001/api/conversation/${threadId}`)
+        .subscribe({
+          next: res => {
+            this.messages = res.conversation_history.map((m: any) => ({
+              sender: m.role === 'user' ? 'user' : 'assistant',
+              text: m.content
+            }));
+          },
+          error: err => {
+            console.error('Error al cargar conversación:', err);
+            this.messages = [];
+          }
+        });
     }
   }
 
-  sendToApi(messageData: any) {
-    this.http.post('http://127.0.0.1:8000/api/chat', messageData)
+  sendMessage() {
+    if (this.productId.trim() && this.productName.trim() && this.chatMessage.trim()) {
+
+      // Primero intentamos crear el producto en backend
+      const productData = {
+        product_id: this.productId,
+        product_name: this.productName,
+      };
+
+      this.http.post('http://127.0.0.1:8000/api/products', productData).subscribe({
+        next: () => {
+          // Producto creado (o ya existe, backend debería controlar el error)
+          // Ahora enviamos el mensaje al chat
+          this.sendChatMessage();
+        },
+        error: (err) => {
+          if (err.status === 400) {
+            // Producto ya existe, igual enviamos el mensaje
+            this.sendChatMessage();
+          } else {
+            console.error('Error al crear producto:', err);
+            this.messages.push({ sender: 'system', text: 'Error al crear producto.' });
+          }
+        }
+      });
+
+    } else {
+      this.messages.push({ sender: 'system', text: 'Por favor, ingresa todos los campos (ID, nombre del producto y mensaje).' });
+    }
+  }
+
+  private sendChatMessage() {
+    const messageData = {
+      userId: localStorage.getItem('userId') || '',
+      username: localStorage.getItem('username') || '',
+      productId: this.productId,
+      productName: this.productName,
+      message: this.chatMessage,
+    };
+
+    this.messages.push({ sender: 'user', text: `Producto ${this.productName} (ID: ${this.productId}): ${this.chatMessage}` });
+
+    this.chatMessage = '';
+
+    this.http.post<any>('http://127.0.0.1:8000/api/chat/', messageData)
       .subscribe({
-        next: (response) => console.log('Mensaje enviado:', response),
-        error: (err) => console.error('Error al enviar el mensaje:', err)
+        next: response => {
+          // Guardar thread_id para la conversación
+          const threadId = response.chat_backend_response?.thread_id || response.thread_id;
+          if (threadId) {
+            localStorage.setItem('thread_id', threadId);
+          }
+
+          const assistantResponse = response.chat_backend_response?.response || response.response || 'No hay respuesta';
+          this.messages.push({ sender: 'assistant', text: assistantResponse });
+        },
+        error: err => {
+          console.error('Error al enviar el mensaje:', err);
+          this.messages.push({ sender: 'system', text: 'Error al enviar el mensaje.' });
+        }
+      });
+  }
+
+
+  sendToApi(messageData: any) {
+    this.http.post<any>('http://127.0.0.1:8000/api/chat/', messageData)
+      .subscribe({
+        next: response => {
+          // Guardar thread_id para la conversación
+          const threadId = response.chat_backend_response?.thread_id || response.thread_id;
+          if (threadId) {
+            localStorage.setItem('thread_id', threadId);
+          }
+
+          const assistantResponse = response.chat_backend_response?.response || response.response || 'No hay respuesta';
+          this.messages.push({ sender: 'assistant', text: assistantResponse });
+        },
+        error: err => {
+          console.error('Error al enviar el mensaje:', err);
+          this.messages.push({ sender: 'system', text: 'Error al enviar el mensaje.' });
+        }
       });
   }
 

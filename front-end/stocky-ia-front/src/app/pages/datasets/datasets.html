@@ -59,13 +59,12 @@
     <span>💬 Chat</span>
     <button (click)="toggleChat()">❌</button>
   </div>
-  <div class="chat-body">
-    <div *ngFor="let message of messages" class="message">
-      <p>{{ message }}</p>
+  <div class="chat-body" #chatBody>
+    <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
+      <p>{{ message.text }}</p>
     </div>
   </div>
   <div class="chat-footer">
-    <!-- Campos para ingresar nombre del producto, ID y mensaje -->
     <input 
       type="text" 
       [(ngModel)]="productName" 

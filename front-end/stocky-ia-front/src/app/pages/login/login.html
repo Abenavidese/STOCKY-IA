@@ -2,25 +2,34 @@
   <div class="form-box login">
     <form (submit)="login($event)">
       <h1>Inicia Sesión</h1>
+
       <div class="input-box">
-        <input type="text" placeholder="Usuario" required />
-        <i class='bx bxs-user'></i>
+        <input
+          type="text"
+          placeholder="Usuario"
+          required
+          [(ngModel)]="email"
+          name="email"
+        />
+        <i class="bx bxs-user"></i>
       </div>
+
       <div class="input-box">
-        <input type="password" placeholder="Contraseña" required />
-        <i class='bx bxs-lock-alt'></i>
+        <input
+          type="password"
+          placeholder="Contraseña"
+          required
+          [(ngModel)]="password"
+          name="password"
+        />
+        <i class="bx bxs-lock-alt"></i>
       </div>
+
       <div class="forgot-link">
         <a href="#">¿Olvidaste tu contraseña?</a>
       </div>
+
       <button type="submit" class="btn">Inicia Sesión</button>
-      <p>o inicia sesión con plataformas sociales</p>
-      <div class="social-icons">
-        <a href="#"><i class='bx bxl-google'></i></a>
-        <a href="#"><i class='bx bxl-facebook'></i></a>
-        <a href="#"><i class='bx bxl-github'></i></a>
-        <a href="#"><i class='bx bxl-linkedin'></i></a>
-      </div>
     </form>
   </div>
 
