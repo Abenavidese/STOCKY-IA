@@ -7,6 +7,7 @@ from api.routes_global import router as global_router
 from api.router_download import router as download_router
 from api.routes_chat import router as chat_router  # Importa el router del chat
 from fastapi.staticfiles import StaticFiles
+from api.prediction_router import router as prediction_router
 import os
 import json
 app = FastAPI()
@@ -25,6 +26,8 @@ app.include_router(upload_router, prefix="/api/datasets", tags=["Upload"])
 app.include_router(global_router, prefix="/api/datasets", tags=["files"])
 app.include_router(download_router, prefix="/api/datasets", tags=["download"])
 app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])  # Incluye la ruta del chat
+app.include_router(prediction_router, prefix="/api", tags=["Prediction Reports"])
+
 
 
 UPLOAD_DIR = os.path.abspath("uploads")
