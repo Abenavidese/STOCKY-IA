@@ -23,6 +23,7 @@ venv/
 **/venv/
 **/.venv/
 **/.venv/
+venvModel
 
 # Archivos temporales y de entorno
 *.log
