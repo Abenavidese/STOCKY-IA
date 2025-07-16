@@ -1,0 +1,90 @@
+<div class="custom-form">
+  <h2>Subir archivo CSV</h2>
+
+  <form class="upload-form">
+    <input type="file" (change)="onFileSelected($event)" />
+    <button type="button" (click)="onUpload()" [disabled]="!selectedFile">Subir y entrenar</button>
+  </form>
+
+  <div class="file-info" *ngIf="selectedFile">
+    <h3>Archivo seleccionado:</h3>
+    <p>{{ selectedFile.name }}</p>
+  </div>
+
+  <div *ngIf="status" class="status">
+    <p><strong>Estado:</strong> {{ status }}</p>
+    <p *ngIf="status === 'SUCCESS'" style="color: green;"> Entrenamiento completado</p>
+    <p *ngIf="status === 'FAILURE'" style="color: red;"> Error en el entrenamiento</p>
+  </div>
+
+  <div *ngIf="result">
+    <h3>Resultado:</h3>
+    <pre>{{ result | json }}</pre>
+  </div>
+</div>
+
+<div class="custom-form">
+  <h2>Predicción de producto</h2>
+
+  <form (submit)="onPredict(); $event.preventDefault()">
+    <input
+      type="text"
+      placeholder="ID del producto"
+      [(ngModel)]="productId"
+      name="productId"
+      required
+    />
+    <input
+      type="text"
+      placeholder="Fecha (YYYY-MM-DD)"
+      [(ngModel)]="fecha"
+      name="fecha"
+      required
+    />
+    <button type="submit">Predecir</button>
+  </form>
+</div>
+
+<div class="file-info" *ngIf="resultado">
+  <h3>Resultado de la predicción:</h3>
+  <p>{{ resultado }}</p>
+</div>
+
+<!-- Chat flotante -->
+<div class="chat" 
+     [ngStyle]="{'top.px': posY, 'left.px': posX}" 
+     (mousedown)="startDrag($event)" 
+     (touchstart)="startDrag($event)">
+  <div class="chat-header">
+    <span>💬 Chat</span>
+    <button (click)="toggleChat()">❌</button>
+  </div>
+  <div class="chat-body" #chatBody>
+    <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
+      <p>{{ message.text }}</p>
+    </div>
+  </div>
+  <div class="chat-footer">
+    <input 
+      type="text" 
+      [(ngModel)]="productName" 
+      placeholder="Nombre del Producto"
+      class="input-field" 
+      required />
+
+    <input 
+      type="text" 
+      [(ngModel)]="productId" 
+      placeholder="ID del Producto"
+      class="input-field" 
+      required />
+
+    <textarea 
+      [(ngModel)]="chatMessage" 
+      placeholder="Escribe un mensaje..." 
+      rows="2" 
+      class="input-field" 
+      required></textarea>
+    <button (click)="sendMessage()">Enviar</button>
+  </div>
+</div>

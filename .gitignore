@@ -1,18 +1,38 @@
 # Cache de Python
 __pycache__/
+<<<<<<< HEAD
+=======
+# Cache de Python
+__pycache__/
+>>>>>>> main
 **/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+<<<<<<< HEAD
+**/*.pyc
+**/*.pyo
+**/*.pyd
+=======
 *.pyc
 *.pyo
 *.pyd
 **/*.pyc
 **/*.pyo
 **/*.pyd
+**/*.pyo
+**/*.pyd
+>>>>>>> main
 
 # Entornos virtuales
 venv/
 .venv/
+venv/
+.venv/
 **/venv/
 **/.venv/
+**/.venv/
+venvModel
 
 # Archivos temporales y de entorno
 *.log
