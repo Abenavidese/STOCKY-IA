@@ -262,3 +262,48 @@ textarea.input-field {
 .hidden {
   display: none;
 }
+
+.predict-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 600px) {
+  .form-row {
+    flex-direction: row;
+  }
+
+  .form-row input {
+    flex: 1;
+  }
+}
+
+.predict-form input {
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.predict-form button {
+  background-color: #a6d6a6;
+  color: white;
+  font-weight: bold;
+  border: none;
+  padding: 12px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.predict-form button:hover {
+  background-color: #8bc98b;
+}
+
