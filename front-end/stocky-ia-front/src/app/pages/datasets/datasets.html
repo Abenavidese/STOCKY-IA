@@ -51,40 +51,37 @@
 </div>
 
 <!-- Chat flotante -->
-<div class="chat" 
-     [ngStyle]="{'top.px': posY, 'left.px': posX}" 
-     (mousedown)="startDrag($event)" 
+<div class="chat"
+     [ngClass]="{ minimized: minimized }"
+     [ngStyle]="{ 'top.px': posY, 'left.px': posX }"
+     (mousedown)="startDrag($event)"
      (touchstart)="startDrag($event)">
+     
   <div class="chat-header">
     <span>💬 Chat</span>
-    <button (click)="toggleChat()">❌</button>
-  </div>
-  <div class="chat-body" #chatBody>
-    <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
-      <p>{{ message.text }}</p>
+    <div class="chat-controls">
+      <button (click)="toggleMinimize()">
+        {{ minimized ? '🔼' : '🔽' }}
+      </button>
+      <button (click)="toggleChat()">❌</button>
     </div>
   </div>
-  <div class="chat-footer">
-    <input 
-      type="text" 
-      [(ngModel)]="productName" 
-      placeholder="Nombre del Producto"
-      class="input-field" 
-      required />
 
-    <input 
-      type="text" 
-      [(ngModel)]="productId" 
-      placeholder="ID del Producto"
-      class="input-field" 
-      required />
+  <div *ngIf="!minimized" class="chat-content">
+    <div class="chat-body" #chatBody>
+      <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
+        <p>{{ message.text }}</p>
+      </div>
+    </div>
 
-    <textarea 
-      [(ngModel)]="chatMessage" 
-      placeholder="Escribe un mensaje..." 
-      rows="2" 
-      class="input-field" 
-      required></textarea>
-    <button (click)="sendMessage()">Enviar</button>
+    <div class="chat-footer">
+      <textarea
+        [(ngModel)]="chatMessage"
+        placeholder="Escribe un mensaje..."
+        rows="2"
+        class="input-field"
+        required></textarea>
+      <button (click)="sendMessage()">Enviar</button>
+    </div>
   </div>
 </div>
