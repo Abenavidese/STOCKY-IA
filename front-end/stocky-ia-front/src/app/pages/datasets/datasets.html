@@ -24,7 +24,7 @@
 </div>
 
 <div class="custom-form">
-  <h2>Predicción para el dia</h2>
+  <h2>Predicción de producto</h2>
 
   <form (submit)="onPredict(); $event.preventDefault()">
     <input
@@ -51,81 +51,37 @@
 </div>
 
 <!-- Chat flotante -->
-<div class="chat" 
-     [ngStyle]="{'top.px': posY, 'left.px': posX}" 
-     (mousedown)="startDrag($event)" 
+<div class="chat"
+     [ngClass]="{ minimized: minimized }"
+     [ngStyle]="{ 'top.px': posY, 'left.px': posX }"
+     (mousedown)="startDrag($event)"
      (touchstart)="startDrag($event)">
+     
   <div class="chat-header">
     <span>💬 Chat</span>
-    <button (click)="toggleChat()">❌</button>
-  </div>
-  <div class="chat-body">
-    <div *ngFor="let message of messages" class="message">
-      <p>{{ message }}</p>
+    <div class="chat-controls">
+      <button (click)="toggleMinimize()">
+        {{ minimized ? '🔼' : '🔽' }}
+      </button>
+      <button (click)="toggleChat()">❌</button>
     </div>
   </div>
-  <div class="chat-footer">
-    <!-- Campos para ingresar nombre del producto, ID y mensaje -->
-    <input 
-      type="text" 
-      [(ngModel)]="productName" 
-      placeholder="Nombre del Producto"
-      class="input-field" 
-      required />
 
-    <input 
-      type="text" 
-      [(ngModel)]="productId" 
-      placeholder="ID del Producto"
-      class="input-field" 
-      required />
-
-    <textarea 
-      [(ngModel)]="chatMessage" 
-      placeholder="Escribe un mensaje..." 
-      rows="2" 
-      class="input-field" 
-      required></textarea>
-    <button (click)="sendMessage()">Enviar</button>
-  </div>
-</div>
-
-<!-- Chat flotante -->
-<div class="chat" 
-     [ngStyle]="{'top.px': posY, 'left.px': posX}" 
-     (mousedown)="startDrag($event)" 
-     (touchstart)="startDrag($event)">
-  <div class="chat-header">
-    <span>💬 Chat</span>
-    <button (click)="toggleChat()">❌</button>
-  </div>
-  <div class="chat-body">
-    <div *ngFor="let message of messages" class="message">
-      <p>{{ message }}</p>
+  <div *ngIf="!minimized" class="chat-content">
+    <div class="chat-body" #chatBody>
+      <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
+        <p>{{ message.text }}</p>
+      </div>
     </div>
-  </div>
-  <div class="chat-footer">
-    <!-- Campos para ingresar nombre del producto, ID y mensaje -->
-    <input 
-      type="text" 
-      [(ngModel)]="productName" 
-      placeholder="Nombre del Producto"
-      class="input-field" 
-      required />
 
-    <input 
-      type="text" 
-      [(ngModel)]="productId" 
-      placeholder="ID del Producto"
-      class="input-field" 
-      required />
-
-    <textarea 
-      [(ngModel)]="chatMessage" 
-      placeholder="Escribe un mensaje..." 
-      rows="2" 
-      class="input-field" 
-      required></textarea>
-    <button (click)="sendMessage()">Enviar</button>
+    <div class="chat-footer">
+      <textarea
+        [(ngModel)]="chatMessage"
+        placeholder="Escribe un mensaje..."
+        rows="2"
+        class="input-field"
+        required></textarea>
+      <button (click)="sendMessage()">Enviar</button>
+    </div>
   </div>
 </div>

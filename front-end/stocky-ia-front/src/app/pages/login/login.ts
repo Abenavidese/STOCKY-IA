@@ -117,10 +117,4 @@ export class Login {
       input.dispatchEvent(new Event('blur'));
     });
   }
-
-  register(event: Event) {
-    event.preventDefault();
-    alert('Registro exitoso (aquí puedes integrar lógica)');
-    this.toggleRegister(false);
-  }
 }
