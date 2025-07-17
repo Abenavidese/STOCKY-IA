@@ -166,7 +166,6 @@ export class Datasets {
   sendMessage() {
     if (this.productId.trim() && this.productName.trim() && this.chatMessage.trim()) {
 
-      // Primero intentamos crear el producto en backend
       const productData = {
         product_id: this.productId,
         product_name: this.productName,
@@ -174,17 +173,16 @@ export class Datasets {
 
       this.http.post('http://127.0.0.1:8000/api/products', productData).subscribe({
         next: () => {
-          // Producto creado (o ya existe, backend debería controlar el error)
-          // Ahora enviamos el mensaje al chat
+          // Producto creado o validado correctamente
           this.sendChatMessage();
         },
         error: (err) => {
           if (err.status === 400) {
-            // Producto ya existe, igual enviamos el mensaje
-            this.sendChatMessage();
+            // Mostrar mensaje de error claro y NO enviar mensaje al chat
+            this.messages.push({ sender: 'system', text: `Error al crear producto: ${err.error.detail}` });
           } else {
             console.error('Error al crear producto:', err);
-            this.messages.push({ sender: 'system', text: 'Error al crear producto.' });
+            this.messages.push({ sender: 'system', text: 'Error inesperado al crear producto.' });
           }
         }
       });
@@ -193,6 +191,7 @@ export class Datasets {
       this.messages.push({ sender: 'system', text: 'Por favor, ingresa todos los campos (ID, nombre del producto y mensaje).' });
     }
   }
+
 
   private sendChatMessage() {
     const messageData = {
