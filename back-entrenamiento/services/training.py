@@ -94,8 +94,10 @@ def train_lstm_model(user_id: str, csv_path: str):
         model_id = datetime.now().strftime("%Y%m%d%H%M%S")
         model_dir = f"models/{user_id}"
         os.makedirs(model_dir, exist_ok=True)
-        model_path = f"{model_dir}/{model_id}.keras"
-        scaler_path = f"{model_dir}/scaler_{model_id}.save"
+        # Guardar el modelo siempre como 'model.keras'
+        model_path = f"{model_dir}/model.keras"
+        # Guardar el scaler con el nombre 'scaler.save'
+        scaler_path = f"{model_dir}/scaler.save"
 
         early_stop = EarlyStopping(monitor='val_loss', patience=2, restore_best_weights=True)
         reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=1e-6, verbose=1)
