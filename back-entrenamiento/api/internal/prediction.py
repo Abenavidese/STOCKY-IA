@@ -62,11 +62,11 @@ def generar_pdf_predicciones(df_predicciones: pd.DataFrame, fecha_objetivo: str,
 @router.post("/predict/pdf")
 def predict_and_save_pdf(request: PredictionRequest):
     try:
-        # --- Lógica de predicción ---
         model_dir = f"models/{request.user_id}"
         model_path = f"{model_dir}/model.keras"
         scaler_path = f"{model_dir}/scaler.save"
         df_path = f"{model_dir}/df_processed.csv"
+        hist_path = f"{model_dir}/historical_sequences.csv"  # NUEVO
 
         if not os.path.exists(model_path) or not os.path.exists(scaler_path) or not os.path.exists(df_path):
             raise HTTPException(status_code=404, detail="Modelo, scaler o DataFrame no encontrados.")
@@ -74,16 +74,16 @@ def predict_and_save_pdf(request: PredictionRequest):
         model = load_model(model_path)
         scaler = joblib.load(scaler_path)
         df = pd.read_csv(df_path, parse_dates=['dt'])
+        df_hist = pd.read_csv(hist_path, parse_dates=['dt_target']) if os.path.exists(hist_path) else pd.DataFrame()
 
         df_pred = predecir_para_fecha(df, request.fecha, model, scaler)
 
         if df_pred.empty:
             raise HTTPException(status_code=404, detail=f"No se pudieron generar predicciones para la fecha {request.fecha}.")
 
-        # --- NUEVO: Guardar predicciones en la base de datos del usuario ---
-        guardar_predicciones_en_db(df_pred, request.user_id)
+        # --- Guardar predicciones + datos históricos en la base de datos ---
+        guardar_predicciones_en_db(df_pred, df_hist, request.user_id)
 
-        # Guardar PDF
         pdf_output_path = f"{model_dir}/informe.pdf"
         generar_pdf_predicciones(df_pred, request.fecha, pdf_output_path)
 
@@ -97,7 +97,8 @@ def predict_and_save_pdf(request: PredictionRequest):
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Ocurrió un error inesperado: {str(e)}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get("/download/report/{user_id}")
 def download_report(user_id: str):

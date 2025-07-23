@@ -39,14 +39,18 @@ def predecir_para_fecha(df, fecha_str, model, scaler, seq_length=SEQ_LENGTH):
         if df_seq['dt'].max().date() != fecha_obj:
             continue
 
+        # Crear entrada para el modelo
         X_input = scaler.transform(df_seq[FEATURES])
         X_input = X_input.reshape((1, seq_length, len(FEATURES)))
         y_pred = model.predict(X_input, verbose=0)[0][0]
 
-        # Se asume que el df tiene 'product_name', 'category_id', 'category_name'
+        # Datos del producto
         product_name = df_prod['product_name'].iloc[0] if 'product_name' in df_prod.columns else f"Producto {prod_id}"
         category_id = df_prod['category_id'].iloc[0] if 'category_id' in df_prod.columns else "N/A"
         category_name = df_prod['category_name'].iloc[0] if 'category_name' in df_prod.columns else "N/A"
+
+        # Obtener el último precio disponible
+        price_usd = df_hist['price_usd'].iloc[-1] if 'price_usd' in df_hist.columns else None
 
         predicciones.append({
             'product_id': prod_id,
@@ -55,7 +59,8 @@ def predecir_para_fecha(df, fecha_str, model, scaler, seq_length=SEQ_LENGTH):
             'category_name': category_name,
             'fecha': fecha_str,
             'venta_anterior': round(df_hist.iloc[-2]['sale_amount'], 2) if len(df_hist) > 1 else 'N/A',
-            'prediccion': round(y_pred, 2)
+            'prediccion': round(y_pred, 2),
+            'price_usd': float(price_usd) if price_usd is not None else None
         })
 
     return pd.DataFrame(predicciones)
