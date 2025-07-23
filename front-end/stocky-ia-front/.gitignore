@@ -40,3 +40,5 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+# Firebase config (no subir claves al repo)
+src/environments/firebase.config.ts

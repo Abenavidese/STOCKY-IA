@@ -22,6 +22,13 @@ export class Datasets {
   fecha: string = '';
   resultado: string = '';
 
+
+  minimized = false;
+
+toggleMinimize() {
+  this.minimized = !this.minimized;
+}
+
   // Propiedades para el menú flotante (chat)
   posX = 100;
   posY = 100;

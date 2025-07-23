@@ -1,9 +1,19 @@
+<!-- Subida de archivo CSV -->
 <div class="custom-form">
   <h2>Subir archivo CSV</h2>
 
   <form class="upload-form">
-    <input type="file" (change)="onFileSelected($event)" />
-    <button type="button" (click)="onUpload()" [disabled]="!selectedFile">Subir y entrenar</button>
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+    />
+    <button
+      type="button"
+      (click)="onUpload()"
+      [disabled]="!selectedFile"
+    >
+      Subir y entrenar
+    </button>
   </form>
 
   <div class="file-info" *ngIf="selectedFile">
@@ -13,8 +23,8 @@
 
   <div *ngIf="status" class="status">
     <p><strong>Estado:</strong> {{ status }}</p>
-    <p *ngIf="status === 'SUCCESS'" style="color: green;"> Entrenamiento completado</p>
-    <p *ngIf="status === 'FAILURE'" style="color: red;"> Error en el entrenamiento</p>
+    <p *ngIf="status === 'SUCCESS'" class="success">Entrenamiento completado</p>
+    <p *ngIf="status === 'FAILURE'" class="failure">Error en el entrenamiento</p>
   </div>
 
   <div *ngIf="result">
@@ -23,24 +33,27 @@
   </div>
 </div>
 
+<!-- Predicción de producto -->
 <div class="custom-form">
-  <h2>Predicción para el dia</h2>
+  <h2>Predicción de producto</h2>
 
-  <form (submit)="onPredict(); $event.preventDefault()">
-    <input
-      type="text"
-      placeholder="ID del usuario (en desarrollo)"
-      [(ngModel)]="productId"
-      name="productId"
-      required
-    />
-    <input
-      type="text"
-      placeholder="Fecha (YYYY-MM-DD)"
-      [(ngModel)]="fecha"
-      name="fecha"
-      required
-    />
+  <form class="predict-form" (submit)="onPredict(); $event.preventDefault()">
+    <div class="form-row">
+      <input
+        type="text"
+        placeholder="ID del usuario"
+        title="Campo en desarrollo"
+        [(ngModel)]="productId"
+        name="productId"
+        required
+      />
+      <input
+        type="date"
+        [(ngModel)]="fecha"
+        name="fecha"
+        required
+      />
+    </div>
     <button type="submit">Predecir</button>
   </form>
 </div>
@@ -51,40 +64,38 @@
 </div>
 
 <!-- Chat flotante -->
-<div class="chat" 
-     [ngStyle]="{'top.px': posY, 'left.px': posX}" 
-     (mousedown)="startDrag($event)" 
+<div class="chat"
+     [ngClass]="{ minimized: minimized }"
+     [ngStyle]="{ 'top.px': posY, 'left.px': posX }"
+     (mousedown)="startDrag($event)"
      (touchstart)="startDrag($event)">
+
   <div class="chat-header">
     <span>💬 Chat</span>
-    <button (click)="toggleChat()">❌</button>
-  </div>
-  <div class="chat-body" #chatBody>
-    <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
-      <p>{{ message.text }}</p>
+    <div class="chat-controls">
+      <button (click)="toggleMinimize()">
+        {{ minimized ? '🔼' : '🔽' }}
+      </button>
+      <button (click)="toggleChat()">❌</button>
     </div>
   </div>
-  <div class="chat-footer">
-    <input 
-      type="text" 
-      [(ngModel)]="productName" 
-      placeholder="Nombre del Producto"
-      class="input-field" 
-      required />
 
-    <input 
-      type="text" 
-      [(ngModel)]="productId" 
-      placeholder="ID del Producto"
-      class="input-field" 
-      required />
+  <div *ngIf="!minimized" class="chat-content">
+    <div class="chat-body" #chatBody>
+      <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
+        <p>{{ message.text }}</p>
+      </div>
+    </div>
 
-    <textarea 
-      [(ngModel)]="chatMessage" 
-      placeholder="Escribe un mensaje..." 
-      rows="2" 
-      class="input-field" 
-      required></textarea>
-    <button (click)="sendMessage()">Enviar</button>
+    <div class="chat-footer">
+      <textarea
+        [(ngModel)]="chatMessage"
+        placeholder="Escribe un mensaje..."
+        rows="2"
+        class="input-field"
+        required
+      ></textarea>
+      <button (click)="sendMessage()">Enviar</button>
+    </div>
   </div>
 </div>

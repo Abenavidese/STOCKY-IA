@@ -1,17 +1,20 @@
 <div class="container" [class.active]="isRegisterMode">
+  <!-- Formulario de Inicio de Sesión -->
   <div class="form-box login">
-    <form (submit)="login($event)">
+    <form (submit)="login($event)" #loginForm="ngForm">
       <h1>Inicia Sesión</h1>
 
       <div class="input-box">
         <input
-          type="text"
-          placeholder="Usuario"
+          type="email"
+          placeholder="Correo electrónico"
           required
-          [(ngModel)]="email"
-          name="email"
+          [(ngModel)]="loginEmail"
+          name="loginEmail"
+          #email="ngModel"
         />
         <i class="bx bxs-user"></i>
+        <p class="field-error" *ngIf="email.invalid && email.touched">Correo inválido.</p>
       </div>
 
       <div class="input-box">
@@ -19,46 +22,92 @@
           type="password"
           placeholder="Contraseña"
           required
-          [(ngModel)]="password"
-          name="password"
+          [(ngModel)]="loginPassword"
+          name="loginPassword"
+          #password="ngModel"
+          minlength="6"
         />
         <i class="bx bxs-lock-alt"></i>
+        <p class="field-error" *ngIf="password.invalid && password.touched">
+          Contraseña requerida (mínimo 6 caracteres).
+        </p>
       </div>
 
       <div class="forgot-link">
         <a href="#">¿Olvidaste tu contraseña?</a>
       </div>
 
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
       <button type="submit" class="btn">Inicia Sesión</button>
+      <p>o inicia sesión con plataformas sociales</p>
+      <div class="social-icons">
+        <a href="#"><i class="bx bxl-google"></i></a>
+        <a href="#"><i class="bx bxl-facebook"></i></a>
+        <a href="#"><i class="bx bxl-github"></i></a>
+        <a href="#"><i class="bx bxl-linkedin"></i></a>
+      </div>
     </form>
   </div>
 
+  <!-- Formulario de Registro -->
   <div class="form-box register">
-    <form (submit)="register($event)">
+    <form (submit)="register($event)" #registerForm="ngForm">
       <h1>Registrarse</h1>
+
       <div class="input-box">
-        <input type="text" placeholder="Usuario" required />
-        <i class='bx bxs-user'></i>
+        <input
+          type="text"
+          placeholder="Nombre de usuario"
+          required
+          [(ngModel)]="registerUsername"
+          name="registerUsername"
+          #regUser="ngModel"
+        />
+        <i class="bx bxs-user"></i>
+        <p class="field-error" *ngIf="regUser.invalid && regUser.touched">Nombre requerido.</p>
       </div>
+
       <div class="input-box">
-        <input type="email" placeholder="Email" required />
-        <i class='bx bxs-envelope'></i>
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          required
+          [(ngModel)]="registerEmail"
+          name="registerEmail"
+          #regEmail="ngModel"
+        />
+        <i class="bx bxs-envelope"></i>
+        <p class="field-error" *ngIf="regEmail.invalid && regEmail.touched">Correo inválido.</p>
       </div>
+
       <div class="input-box">
-        <input type="password" placeholder="Contraseña" required />
-        <i class='bx bxs-lock-alt'></i>
+        <input
+          type="password"
+          placeholder="Contraseña"
+          required
+          [(ngModel)]="registerPassword"
+          name="registerPassword"
+          #regPass="ngModel"
+          minlength="6"
+        />
+        <i class="bx bxs-lock-alt"></i>
+        <p class="field-error" *ngIf="regPass.invalid && regPass.touched">Contraseña mínima de 6 caracteres.</p>
       </div>
+
+      <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
       <button type="submit" class="btn">Registrarse</button>
       <p>o regístrate con redes sociales</p>
       <div class="social-icons">
-        <a href="#"><i class='bx bxl-google'></i></a>
-        <a href="#"><i class='bx bxl-facebook'></i></a>
-        <a href="#"><i class='bx bxl-github'></i></a>
-        <a href="#"><i class='bx bxl-linkedin'></i></a>
+        <a href="#"><i class="bx bxl-google"></i></a>
+        <a href="#"><i class="bx bxl-facebook"></i></a>
+        <a href="#"><i class="bx bxl-github"></i></a>
+        <a href="#"><i class="bx bxl-linkedin"></i></a>
       </div>
     </form>
   </div>
-
+  <!-- Panel de cambio entre login y registro -->
   <div class="toggle-box">
     <div class="toggle-panel toggle-left">
       <h1>¡Hola, bienvenido!</h1>
