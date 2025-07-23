@@ -4,6 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from api.internal.internal_controller import router as internal_router
 from api.train import router as train_router
+from api.internal.internal_predictions import router as internal_predictions_router
 from api.internal.prediction import router as prediction_router
 app = FastAPI(title="Backend del Modelo de IA")
 
@@ -18,6 +19,7 @@ app.add_middleware(
 
 # Monta los endpoints internos
 app.include_router(internal_router, prefix="/internal")
+app.include_router(internal_predictions_router, prefix="/api/internal/predictions", tags=["Internal Predictions"])
 
 app.include_router(train_router, prefix="/api/train", tags=["Training"])
 app.include_router(prediction_router, prefix="/api/prediction", tags=["Prediction"])

@@ -1,5 +1,3 @@
-# backend-modelo/services/training.py
-
 import pandas as pd
 import numpy as np
 import os
@@ -15,13 +13,20 @@ SEQ_LENGTH = 5
 BATCH_SIZE = 128
 EPOCHS = 5
 
-def create_sequences(X, y, product_ids, seq_length):
-    X_seq, y_seq = [], []
+def create_sequences(X, y, product_ids, dts, seq_length):
+    """
+    Genera secuencias de longitud seq_length para cada producto,
+    incluyendo la fecha (dt) asociada al target.
+    """
+    X_seq, y_seq, prod_seq, dt_seq = [], [], [], []
     for i in range(len(X) - seq_length):
         if product_ids[i:i+seq_length].nunique() == 1:
             X_seq.append(X[i:i+seq_length])
             y_seq.append(y[i + seq_length])
-    return np.array(X_seq), np.array(y_seq)
+            prod_seq.append(product_ids.iloc[i + seq_length])
+            dt_seq.append(dts.iloc[i + seq_length])  # Guardar la fecha objetivo
+    return np.array(X_seq), np.array(y_seq), np.array(prod_seq), np.array(dt_seq)
+
 def train_lstm_model(user_id: str, csv_path: str):
     print(f"[TRAINING] Iniciando con archivo: {csv_path}")
 
@@ -30,7 +35,6 @@ def train_lstm_model(user_id: str, csv_path: str):
             raise FileNotFoundError(f"El archivo CSV no existe: {csv_path}")
 
         df = pd.read_csv(csv_path, parse_dates=["dt"])
-
         if df.empty:
             raise ValueError("El archivo CSV está vacío.")
 
@@ -47,8 +51,12 @@ def train_lstm_model(user_id: str, csv_path: str):
 
         df = df.dropna().reset_index(drop=True)
 
+        # --- Directorio de modelos ---
+        model_dir = f"models/{user_id}"
+        os.makedirs(model_dir, exist_ok=True)
+
         # --- Guardar df procesado ---
-        df_processed_path = f"models/{user_id}/df_processed.csv"
+        df_processed_path = f"{model_dir}/df_processed.csv"
         df.to_csv(df_processed_path, index=False)
         print(f"[INFO] DataFrame procesado guardado en: {df_processed_path}")
 
@@ -62,7 +70,7 @@ def train_lstm_model(user_id: str, csv_path: str):
         ]
         target = 'sale_amount'
 
-        df_selected = df[features + [target, 'product_id']]
+        df_selected = df[features + [target, 'product_id', 'dt']]
 
         X = df_selected[features]
         y = df_selected[target]
@@ -70,10 +78,25 @@ def train_lstm_model(user_id: str, csv_path: str):
         scaler = MinMaxScaler()
         X_scaled = scaler.fit_transform(X)
 
-        X_seq, y_seq = create_sequences(X_scaled, y.values, df_selected['product_id'], SEQ_LENGTH)
+        # --- Crear secuencias con fechas ---
+        X_seq, y_seq, prod_seq, dt_seq = create_sequences(
+            X_scaled, y.values, df_selected['product_id'], df_selected['dt'], SEQ_LENGTH
+        )
 
         if len(X_seq) == 0:
             raise ValueError("No se pudieron crear secuencias válidas para entrenamiento.")
+
+        # --- Guardar histórico de secuencias ---
+        seq_feature_names = [f"{feat}_t{i}" for i in range(SEQ_LENGTH) for feat in features]
+        X_seq_flat = X_seq.reshape(X_seq.shape[0], -1)
+        df_hist_seq = pd.DataFrame(X_seq_flat, columns=seq_feature_names)
+        df_hist_seq['target_y'] = y_seq
+        df_hist_seq['product_id'] = prod_seq
+        df_hist_seq['dt_target'] = dt_seq  # NUEVA COLUMNA
+
+        hist_seq_path = f"{model_dir}/historical_sequences.csv"
+        df_hist_seq.to_csv(hist_seq_path, index=False)
+        print(f"[INFO] Histórico de secuencias guardado en: {hist_seq_path}")
 
         # --- Dividir train/val ---
         split_index = int(len(X_seq) * 0.85)
@@ -91,11 +114,8 @@ def train_lstm_model(user_id: str, csv_path: str):
         model.compile(optimizer='adam', loss='mse', metrics=['mae'])
 
         # --- Callbacks ---
-        model_id = datetime.now().strftime("%Y%m%d%H%M%S")
-        model_dir = f"models/{user_id}"
-        os.makedirs(model_dir, exist_ok=True)
-        model_path = f"{model_dir}/{model_id}.keras"
-        scaler_path = f"{model_dir}/scaler_{model_id}.save"
+        model_path = f"{model_dir}/model.keras"
+        scaler_path = f"{model_dir}/scaler.save"
 
         early_stop = EarlyStopping(monitor='val_loss', patience=2, restore_best_weights=True)
         reduce_lr = ReduceLROnPlateau(monitor='val_loss', factor=0.5, patience=3, min_lr=1e-6, verbose=1)
@@ -115,7 +135,7 @@ def train_lstm_model(user_id: str, csv_path: str):
         joblib.dump(scaler, scaler_path)
 
         print(f"[SUCCESS] Modelo guardado en: {model_path}")
-        return model_path, scaler_path, model_id
+        return model_path, scaler_path, hist_seq_path
 
     except Exception as e:
         print(f"[ERROR ENTRENAMIENTO]: {e}")

@@ -7,12 +7,13 @@ import {
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
 } from '@angular/fire/auth';
+
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './login.html',
-  styleUrl: './login.scss',
+  styleUrls: ['./login.scss'], // Cambié styleUrl a styleUrls
 })
 export class Login {
   constructor(private router: Router, private auth: Auth) {}
@@ -41,7 +42,6 @@ export class Login {
     event.preventDefault();
     this.errorMessage = '';
 
-    // Forzar blur en inputs para que Angular marque campos como tocados
     this.forceInputsTouched();
 
     if (!this.loginEmail || !this.loginPassword) {
@@ -50,7 +50,21 @@ export class Login {
     }
 
     try {
-      await signInWithEmailAndPassword(this.auth, this.loginEmail, this.loginPassword);
+      const userCredential = await signInWithEmailAndPassword(
+        this.auth,
+        this.loginEmail,
+        this.loginPassword
+      );
+
+      // Obtener UID del usuario
+      const uid = userCredential.user?.uid;
+      console.log('UID del usuario logueado:', uid);
+
+      // Guardar UID en localStorage
+      if (uid) {
+        localStorage.setItem('userUID', uid);
+      }
+
       this.router.navigate(['/home']);
     } catch (error: any) {
       console.error('Firebase error (login):', error.code, error.message);
@@ -75,7 +89,21 @@ export class Login {
     }
 
     try {
-      await createUserWithEmailAndPassword(this.auth, this.registerEmail, this.registerPassword);
+      const userCredential = await createUserWithEmailAndPassword(
+        this.auth,
+        this.registerEmail,
+        this.registerPassword
+      );
+
+      // Obtener UID del nuevo usuario registrado
+      const uid = userCredential.user?.uid;
+      console.log('UID del nuevo usuario registrado:', uid);
+
+      // Guardar UID en localStorage
+      if (uid) {
+        localStorage.setItem('userUID', uid);
+      }
+
       alert('Registro exitoso');
       this.toggleRegister(false);
     } catch (error: any) {
@@ -116,6 +144,4 @@ export class Login {
       input.dispatchEvent(new Event('blur'));
     });
   }
-
-
 }
