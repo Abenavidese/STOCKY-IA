@@ -19,6 +19,10 @@ export class Datasets {
   status: string | null = null;
   result: any = null;
 
+  // Variables de estado para mostrar "loading"
+  isUploading = false;
+  isPredicting = false;
+
   // Propiedades para predicción
   productId: string = ''; // Este será tu user_id
   productName: string = ''; 
@@ -36,9 +40,9 @@ export class Datasets {
 
   minimized = false;
 
-toggleMinimize() {
-  this.minimized = !this.minimized;
-}
+  toggleMinimize() {
+    this.minimized = !this.minimized;
+  }
 
   ngOnInit(): void {
     // Obtener UID al iniciar el componente
@@ -98,6 +102,7 @@ toggleMinimize() {
   onPredict() {
     // Usaremos this.productId como el user_id
     if (this.productId && this.fecha) {
+      this.isPredicting = true; // Activar loading
       this.resultado = 'Generando y descargando reporte...'; // Mensaje de espera para el usuario
 
       const userId = this.productId;
@@ -138,6 +143,9 @@ toggleMinimize() {
             }
           };
           reader.readAsText(err.error);
+        },
+        complete: () => {
+          this.isPredicting = false; // Desactivar loading
         }
       });
 
@@ -231,6 +239,7 @@ toggleMinimize() {
     }
 
     if (this.selectedFile) {
+      this.isUploading = true; // Activar loading
       const formData = new FormData();
       formData.append('file', this.selectedFile);
       formData.append('user_id', uid);
@@ -246,30 +255,48 @@ toggleMinimize() {
           error: (err) => {
             console.error('Error al subir archivo:', err);
             this.status = 'FAILURE';
+          },
+          complete: () => {
+            this.isUploading = false; // Desactivar loading
           }
         });
     }
   }
 
-  pollTaskStatus(taskId: string) {
-    const interval = setInterval(() => {
-      this.http.get<any>(`http://127.0.0.1:8000/api/tasks/task-status/${taskId}`)
-        .subscribe({
-          next: (res) => {
-            this.status = res.status;
-            this.result = res.result;
-            if (res.status === 'SUCCESS' || res.status === 'FAILURE') {
-              clearInterval(interval);
-            }
-          },
-          error: (err) => {
-            console.error('Error al consultar estado:', err);
-            clearInterval(interval);
-            this.status = 'FAILURE';
+pollTaskStatus(taskId: string) {
+  const interval = setInterval(() => {
+    this.http.get<any>(`http://127.0.0.1:8000/api/tasks/task-status/${taskId}`)
+      .subscribe({
+        next: (res) => {
+          this.status = res.status;
+
+          // Si es SUCCESS, mostrar solo el mensaje
+          if (res.status === 'SUCCESS') {
+            this.result = 'ENTRENAMIENTO EXITOSO';
+          } 
+          // Si es FAILURE, puedes poner otro mensaje
+          else if (res.status === 'FAILURE') {
+            this.result = 'ERROR EN EL ENTRENAMIENTO';
+          } 
+          // Si está en PENDING o RUNNING, mostrar progreso (opcional)
+          else {
+            this.result = null; // o "Procesando..."
           }
-        });
-    }, 3000);
-  }
+
+          if (res.status === 'SUCCESS' || res.status === 'FAILURE') {
+            clearInterval(interval);
+          }
+        },
+        error: (err) => {
+          console.error('Error al consultar estado:', err);
+          clearInterval(interval);
+          this.status = 'FAILURE';
+          this.result = 'ERROR EN LA CONSULTA';
+        }
+      });
+  }, 3000);
+}
+
 
   startDrag(event: MouseEvent | TouchEvent) {
     this.isDragging = true;

@@ -10,11 +10,14 @@
     <button
       type="button"
       (click)="onUpload()"
-      [disabled]="!selectedFile"
+      [disabled]="!selectedFile || isUploading"
     >
       Subir y entrenar
     </button>
   </form>
+
+  <!-- Mensaje de loading al subir -->
+  <p *ngIf="isUploading" class="loading">⏳ Subiendo y entrenando... Por favor espera.</p>
 
   <div class="file-info" *ngIf="selectedFile">
     <h3>Archivo seleccionado:</h3>
@@ -39,7 +42,6 @@
 
   <form class="predict-form" (submit)="onPredict(); $event.preventDefault()">
     <div class="form-row">
-      
       <input
         type="date"
         [(ngModel)]="fecha"
@@ -47,8 +49,11 @@
         required
       />
     </div>
-    <button type="submit">Predecir</button>
+    <button type="submit" [disabled]="isPredicting">Predecir</button>
   </form>
+
+  <!-- Mensaje de loading en predicción -->
+  <p *ngIf="isPredicting" class="loading">⏳ Generando predicción...</p>
 </div>
 
 <div class="file-info" *ngIf="resultado">
