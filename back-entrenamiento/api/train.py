@@ -10,7 +10,7 @@ router = APIRouter()
 def entrenar_desde_csvs(payload: dict = Body(...)):
     """
     Lanza la tarea de entrenamiento usando el archivo CSV y el user_id
-    enviados por el backend general.
+    enviados por el backend general. TODO
     """
     user_id = payload.get("user_id")
     file_path = payload.get("file_path")
