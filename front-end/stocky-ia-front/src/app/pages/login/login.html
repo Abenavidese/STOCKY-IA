@@ -39,7 +39,12 @@
 
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-      <button type="submit" class="btn">Inicia Sesión</button>
+      <!-- Botón con spinner -->
+      <button type="submit" class="btn" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Inicia Sesión</span>
+        <div class="spinner" *ngIf="isLoading"></div>
+      </button>
+
       <p>o inicia sesión con plataformas sociales</p>
       <div class="social-icons">
         <a href="#"><i class="bx bxl-google"></i></a>
@@ -97,7 +102,11 @@
 
       <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
 
-      <button type="submit" class="btn">Registrarse</button>
+      <button type="submit" class="btn" [disabled]="isLoading">
+        <span *ngIf="!isLoading">Registrarse</span>
+        <div class="spinner" *ngIf="isLoading"></div>
+      </button>
+
       <p>o regístrate con redes sociales</p>
       <div class="social-icons">
         <a href="#"><i class="bx bxl-google"></i></a>
@@ -114,8 +123,6 @@
       <h1>¡Hola, bienvenido!</h1>
       <p>¿No tienes una cuenta?</p>
       <button class="btn" (click)="toggleRegister(true)">Regístrate</button>
-
-      <!-- Imagen del logo -->
       <img src="assets/images/12.png" alt="Logo StockIA" class="logo-stock" />
     </div>
 
@@ -124,5 +131,11 @@
       <p>¿Ya tienes una cuenta?</p>
       <button class="btn" (click)="toggleRegister(false)">Inicia Sesión</button>
     </div>
+  </div>
+
+  <!-- Overlay de cargando -->
+  <div class="loading-overlay" *ngIf="isLoading">
+    <div class="loader"></div>
+    <p>Verificando credenciales...</p>
   </div>
 </div>

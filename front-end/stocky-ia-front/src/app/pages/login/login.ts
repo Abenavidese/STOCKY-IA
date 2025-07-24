@@ -18,8 +18,8 @@ import {
 export class Login {
   constructor(private router: Router, private auth: Auth) {}
 
-  // Estados del formulario
   isRegisterMode = false;
+  isLoading = false; // NUEVO LOADER
 
   // Campos de login
   loginEmail = '';
@@ -49,6 +49,8 @@ export class Login {
       return;
     }
 
+    this.isLoading = true; // Mostrar animación de cargando
+
     try {
       const userCredential = await signInWithEmailAndPassword(
         this.auth,
@@ -56,25 +58,18 @@ export class Login {
         this.loginPassword
       );
 
-      // Obtener UID y Email
       const uid = userCredential.user?.uid;
       const email = userCredential.user?.email;
 
-      console.log('UID del usuario logueado:', uid);
-      console.log('Email del usuario logueado:', email);
-
-      // Guardar UID y Email en localStorage
-      if (uid) {
-        localStorage.setItem('userUID', uid);
-      }
-      if (email) {
-        localStorage.setItem('userEmail', email);
-      }
+      if (uid) localStorage.setItem('userUID', uid);
+      if (email) localStorage.setItem('userEmail', email);
 
       this.router.navigate(['/home']);
     } catch (error: any) {
       console.error('Firebase error (login):', error.code, error.message);
       this.errorMessage = this.getFirebaseError(error.code);
+    } finally {
+      this.isLoading = false; // Ocultar animación
     }
   }
 
@@ -94,6 +89,8 @@ export class Login {
       return;
     }
 
+    this.isLoading = true; // Mostrar animación de cargando
+
     try {
       const userCredential = await createUserWithEmailAndPassword(
         this.auth,
@@ -101,26 +98,19 @@ export class Login {
         this.registerPassword
       );
 
-      // Obtener UID y Email
       const uid = userCredential.user?.uid;
       const email = userCredential.user?.email;
 
-      console.log('UID del nuevo usuario registrado:', uid);
-      console.log('Email del nuevo usuario registrado:', email);
-
-      // Guardar UID y Email en localStorage
-      if (uid) {
-        localStorage.setItem('userUID', uid);
-      }
-      if (email) {
-        localStorage.setItem('userEmail', email);
-      }
+      if (uid) localStorage.setItem('userUID', uid);
+      if (email) localStorage.setItem('userEmail', email);
 
       alert('Registro exitoso');
       this.toggleRegister(false);
     } catch (error: any) {
       console.error('Firebase error (register):', error.code, error.message);
       this.errorMessage = this.getFirebaseError(error.code);
+    } finally {
+      this.isLoading = false; // Ocultar animación
     }
   }
 
