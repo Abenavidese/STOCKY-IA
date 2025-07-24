@@ -8,6 +8,7 @@ from api.internal.internal_predictions import router as internal_predictions_rou
 from api.internal.prediction import router as prediction_router
 from api.tasks_router import tasks_router
 from api.train_status_router import train_status_router
+from api.analytics_router import analytics_router
 app = FastAPI(title="Backend del Modelo de IA")
 
 # Habilita CORS si el backend general o frontend hacen llamadas
@@ -26,6 +27,7 @@ app.include_router(train_status_router, prefix="/api/train", tags=["Train Status
 app.include_router(train_router, prefix="/api/train", tags=["Training"])
 app.include_router(prediction_router, prefix="/api/prediction", tags=["Prediction"])
 app.include_router(tasks_router, prefix="/api/tasks", tags=["Tasks"])
+app.include_router(analytics_router, prefix="/api/internal", tags=["Analytics"])
 
 
 @app.get("/health")
