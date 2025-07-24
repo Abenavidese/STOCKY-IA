@@ -39,15 +39,12 @@ export class AuthService {
     return this.currentUid || localStorage.getItem('userUID');
   }
 
-  // Obtener Email
   getEmail(): string | null {
     return this.currentEmail || localStorage.getItem('userEmail');
   }
 
-  // Cerrar sesión
   async logout() {
     await signOut(this.auth);
-    // Limpiar localStorage al cerrar sesión
     localStorage.removeItem('userUID');
     localStorage.removeItem('userEmail');
   }
