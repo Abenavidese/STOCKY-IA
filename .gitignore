@@ -24,6 +24,7 @@ venv/
 **/.venv/
 **/.venv/
 venvModel
+back-entrenamiento/models/JxXANXmNPUY5vSJiCPsWAj2HuEf1/
 
 # Archivos temporales y de entorno
 *.log
@@ -43,3 +44,7 @@ temp_downloads/
 
 !/front-end/README.md
 back-model/back-model/*
+
+../../node_modules/
+../../package-lock.json
+../../package.json

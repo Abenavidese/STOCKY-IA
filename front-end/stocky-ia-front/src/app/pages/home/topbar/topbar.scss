@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 85px; /* Deja espacio para el sidebar */
-  width: calc(100% - 85px); /* Ajusta el ancho para no superponerse */
+  width: calc(100% - 85px);
   height: 60px;
   background: linear-gradient(90deg, #000000, #0a1b2a);
   color: #fff;
@@ -12,16 +12,123 @@
   padding: 0 20px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
   font-family: 'Poppins', sans-serif;
-  z-index: 999; /* Encima del contenido pero debajo de overlays */
+  z-index: 999;
 }
 
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ------------------- LOGO ------------------- */
+.topbar-logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  position: relative;
+  animation: fadeInLogo 1.5s ease forwards;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .topbar-logo {
+    width: 25px;
+    height: 25px;
+  }
+}
+
+@media (max-width: 480px) {
+  .topbar-logo {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+/* Borde arcoíris animado para el logo */
+.topbar-logo::before {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: -3px;
+  right: -3px;
+  bottom: -3px;
+  border-radius: 8px;
+  background: linear-gradient(
+    120deg,
+    #ff4ecd,
+    #4facfe,
+    #43e97b,
+    #fddb92,
+    #ff6a00,
+    #ff4ecd
+  );
+  background-size: 400% 400%;
+  animation: rainbowBorder 6s ease infinite;
+  z-index: -1;
+  pointer-events: none;
+}
+
+/* Animación borde arcoíris */
+@keyframes rainbowBorder {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Animación de aparición logo */
+@keyframes fadeInLogo {
+  0% { opacity: 0; transform: translateY(-8px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* ------------------- TEXTO APP ------------------- */
 .app-name {
-  font-size: 1.3rem;
-  font-weight: bold;
-  color: #4a6cf7; /* Azul brillante para destacar */
-  letter-spacing: 1px;
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: none;
+  color: #fff;
+  text-shadow: none;
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
 }
 
+/* Estilo especial solo para .IA */
+.ia-glow {
+  background: linear-gradient(
+    90deg,
+    #ff4ecd,
+    #4facfe,
+    #43e97b,
+    #fddb92,
+    #ff6a00,
+    #ff4ecd
+  );
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: neonGradient 6s ease infinite, neonGlow 1.5s ease-in-out infinite alternate;
+  font-weight: 900;
+  padding-left: 3px; /* Separación opcional antes de .IA */
+}
+
+/* Animación degradado en movimiento */
+@keyframes neonGradient {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Brillo tipo neón */
+@keyframes neonGlow {
+  0% { text-shadow: 0 0 5px #ff4ecd, 0 0 10px #4facfe, 0 0 15px #43e97b; }
+  100% { text-shadow: 0 0 10px #fddb92, 0 0 20px #ff6a00, 0 0 25px #4facfe; }
+}
+
+/* ------------------- DERECHA ------------------- */
 .topbar-right {
   display: flex;
   align-items: center;
