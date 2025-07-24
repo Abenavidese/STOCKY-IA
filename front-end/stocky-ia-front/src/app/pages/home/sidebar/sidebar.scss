@@ -1,67 +1,81 @@
-.sidebar {
-  width: 220px;
-  height: calc(100vh - 60px);
-  background: linear-gradient(180deg, #7494ec 0%, #a6baff 100%);
-  color: #ffffff;
-  padding: 1.5rem;
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200');
+
+.menu {
   position: fixed;
-  top: 60px;
+  top: 0;
   left: 0;
-  margin-right: 10px;
-  font-family: 'Poppins', sans-serif;
-  border-radius: 0 30px 30px 0;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(6px);
-  transition: all 0.5s ease;
-  z-index: 1000;
+  width: 85px;
+  height: 100%;
+  background: linear-gradient(180deg, #000000, #0a1b2a); /* Degradado oscuro */
+  transition: 0.3s;
   overflow: hidden;
+  padding: 20px 0;
+  box-shadow: 8px 0 12px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
 
-  &.closed {
-    transform: translateX(-100%);
+  &:hover {
+    width: 260px;
   }
+}
 
-  h2 {
-    margin-top: 0;
-    margin-bottom: 2rem;
-    font-size: 1.6rem;
-    text-align: center;
-    font-weight: 700;
-    color: #fff;
-    letter-spacing: 1px;
+.menu-content {
+  margin: 0;
+  padding: 0;
+}
+
+.menu-content li {
+  list-style: none;
+  margin-bottom: 20px;
+  padding-left: 10px;
+  border-radius: 0 50px 50px 0;
+  transition: 0.3s;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
   }
+}
 
-  ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
+.menu-content li a,
+.logout-btn {
+  text-decoration: none;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-family: 'Poppins', sans-serif;
+  padding: 10px;
+  transition: all 0.3s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  cursor: pointer;
+}
 
-    li {
-      margin: 1rem 0;
+.menu-content li a.active {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+}
 
-      a {
-        display: block;
-        padding: 0.75rem 1rem;
-        border-radius: 12px;
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff;
-        text-decoration: none;
-        font-size: 1rem;
-        font-weight: 500;
-        transition: all 0.3s ease;
+.menu-content li span:nth-child(2) {
+  display: none;
+  margin-left: 10px;
+  white-space: nowrap;
+  font-size: 0.95rem;
+}
 
-        &:hover {
-          background: rgba(255, 255, 255, 0.25);
-          color: #ffffff;
-          transform: translateX(6px);
-        }
+.menu:hover li span:nth-child(2) {
+  display: inline-block;
+}
 
-        &.active {
-          background: linear-gradient(to right, #4a6cf7, #748ffc);
-          color: #fff;
-          font-weight: 600;
-          box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-        }
-      }
-    }
-  }
+.material-symbols-outlined {
+  background: #111;
+  padding: 10px;
+  border-radius: 50%;
+  font-size: 22px;
+  transition: background 0.3s, color 0.3s;
+}
+
+.menu-content li a:hover .material-symbols-outlined,
+.logout-btn:hover .material-symbols-outlined {
+  background: #4a6cf7;
+  color: #fff;
 }

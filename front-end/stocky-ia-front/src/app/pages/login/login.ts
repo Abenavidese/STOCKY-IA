@@ -13,7 +13,7 @@ import {
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './login.html',
-  styleUrls: ['./login.scss'], // Cambié styleUrl a styleUrls
+  styleUrls: ['./login.scss'],
 })
 export class Login {
   constructor(private router: Router, private auth: Auth) {}
@@ -56,13 +56,19 @@ export class Login {
         this.loginPassword
       );
 
-      // Obtener UID del usuario
+      // Obtener UID y Email
       const uid = userCredential.user?.uid;
-      console.log('UID del usuario logueado:', uid);
+      const email = userCredential.user?.email;
 
-      // Guardar UID en localStorage
+      console.log('UID del usuario logueado:', uid);
+      console.log('Email del usuario logueado:', email);
+
+      // Guardar UID y Email en localStorage
       if (uid) {
         localStorage.setItem('userUID', uid);
+      }
+      if (email) {
+        localStorage.setItem('userEmail', email);
       }
 
       this.router.navigate(['/home']);
@@ -95,13 +101,19 @@ export class Login {
         this.registerPassword
       );
 
-      // Obtener UID del nuevo usuario registrado
+      // Obtener UID y Email
       const uid = userCredential.user?.uid;
-      console.log('UID del nuevo usuario registrado:', uid);
+      const email = userCredential.user?.email;
 
-      // Guardar UID en localStorage
+      console.log('UID del nuevo usuario registrado:', uid);
+      console.log('Email del nuevo usuario registrado:', email);
+
+      // Guardar UID y Email en localStorage
       if (uid) {
         localStorage.setItem('userUID', uid);
+      }
+      if (email) {
+        localStorage.setItem('userEmail', email);
       }
 
       alert('Registro exitoso');

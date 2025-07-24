@@ -1,34 +1,45 @@
 .topbar {
   position: fixed;
   top: 0;
-  left: 0;
-  width: 100%;
+  left: 85px; /* Deja espacio para el sidebar */
+  width: calc(100% - 85px); /* Ajusta el ancho para no superponerse */
   height: 60px;
-  background: linear-gradient(90deg, #7494ec, #a6baff);
+  background: linear-gradient(90deg, #000000, #0a1b2a);
   color: #fff;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
-  font-size: 1.1rem;
-  font-weight: 500;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  z-index: 900;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
+  padding: 0 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  font-family: 'Poppins', sans-serif;
+  z-index: 999; /* Encima del contenido pero debajo de overlays */
+}
+
+.app-name {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #4a6cf7; /* Azul brillante para destacar */
+  letter-spacing: 1px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
 }
 
 .logout-btn {
-  background-color: #ffffff22;
-  color: white;
-  border: 1px solid white;
-  padding: 0.4rem 1rem;
-  border-radius: 8px;
-  font-weight: 500;
+  background: #4a6cf7;
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.3s ease, transform 0.2s ease;
 
   &:hover {
-    background-color: #ffffff44;
+    background: #3657d4;
+    transform: scale(1.05);
   }
 }
