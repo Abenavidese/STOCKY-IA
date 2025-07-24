@@ -17,11 +17,14 @@ interface Biografia {
 })
 export class Inicio implements OnInit {
   mensajesBanner = [
-    'Optimiza tu inventario con IA',
-    'Predice la demanda y ahorra recursos',
-    'Moderniza tu gestión empresarial',
-    'Decisiones más inteligentes con StockyIA'
-  ];
+  'Impulsa tus decisiones con inteligencia artificial avanzada',
+  'Predicciones precisas para optimizar tu cadena de suministro',
+  'Convierte los datos en estrategias con StockyIA',
+  'Reduce costos y aumenta la rentabilidad con análisis inteligente',
+  'Innovación en cada predicción, eficiencia en cada acción',
+  'Visualiza el futuro de tu negocio con tecnología predictiva'
+];
+
 
   mensajeActual = '';
   private index = 0;

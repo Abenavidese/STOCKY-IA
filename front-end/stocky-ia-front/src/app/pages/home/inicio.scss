@@ -38,9 +38,17 @@
 
   p {
     margin-top: 0.8rem;
-    font-size: 1.25rem;
-    color: #cbd5e1;
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #60a5fa;
+    animation: fadeText 3s ease-in-out infinite;
   }
+}
+
+@keyframes fadeText {
+  0% { opacity: 0; transform: translateY(10px); }
+  50% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
 }
 
 /* -------------------- HERO -------------------- */
