@@ -29,8 +29,8 @@ def get_analytics(user_id: str):
         df = pd.DataFrame(data)
 
         # --- Ajustar predicciones ---
-        df["prediccion"] = (df["prediccion"] * 7).round(2)
-        df["ventas_usd"] = (df["prediccion"] * df["price_usd"]).round(2)
+        df["prediccion"] = (df["prediccion"] * 7)
+        df["ventas_usd"] = (df["prediccion"] * df["price_usd"])
 
         # --- 1. Ventas totales por categoría ---
         ventas_por_categoria = df.groupby("category_name")["ventas_usd"].sum().sort_values(ascending=False).to_dict()
