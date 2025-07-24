@@ -48,7 +48,7 @@ export class AuthService {
     return localStorage.getItem('userEmail');
   }
 
-  // Cerrar sesión
+  // Cerrar sesión  asdasdasdasdasdas
   async logout() {
     await signOut(this.auth);
     localStorage.removeItem('userUID');
