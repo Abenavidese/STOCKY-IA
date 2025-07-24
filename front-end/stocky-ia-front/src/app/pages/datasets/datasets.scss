@@ -123,18 +123,31 @@ pre {
 /* CHAT */
 .chat {
   position: fixed;
-  width: 380px;
-  height: 500px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  border-radius: 12px;
+  width: 550px;
+  height: 600px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   user-select: none;
   overflow: hidden;
-  z-index: 9999;
+  z-index: 10000;
   font-family: 'Poppins', sans-serif;
-  transition: all 0.3s ease;
+  transition: width 0.35s ease, height 0.35s ease, box-shadow 0.35s ease;
+  border: 1px solid #d3d9e6;
+}
+
+select {
+  width: auto;               /* No forzar ancho fijo */
+  min-width: 120px;          /* Un ancho mínimo para que no sea demasiado pequeño */
+  max-width: 100%;           /* Que no se pase del contenedor padre */
+  padding: 6px 10px;         /* Espaciado interno para que se vea bien */
+  font-size: 14px;           /* Tamaño legible */
+  box-sizing: border-box;    /* Para que padding no afecte al ancho total */
+  white-space: nowrap;       /* Evita que el texto se divida en varias líneas */
+  overflow: hidden;          /* Oculta texto sobrante */
+  text-overflow: ellipsis;   /* Muestra "..." si el texto es muy largo */
 }
 
 /* Contenedor que permite scroll del cuerpo sin empujar el footer */
@@ -217,10 +230,23 @@ pre {
   padding: 15px 20px;
   background-color: #f4f7fc;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* <-- aquí está el problema */
   gap: 10px;
   border-top: 1px solid #ccc;
 }
+
+.selects-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.selects-row > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1; /* que cada columna tome el mismo espacio */
+}
+
 
 .input-field {
   width: 100%;
@@ -290,6 +316,10 @@ textarea.input-field {
   font-size: 16px;
   border-radius: 8px;
   border: 1px solid #ccc;
+}
+
+.chat.wide-chat {
+  width: 380px;  /* ancho cuando el selector producto aparece */
 }
 
 .predict-form button {

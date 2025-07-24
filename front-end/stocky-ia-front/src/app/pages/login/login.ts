@@ -68,7 +68,8 @@ export class Login {
         localStorage.setItem('userUID', uid);
       }
       if (email) {
-        localStorage.setItem('userEmail', email);
+        const emailPrefix = email.split('@')[0];
+        localStorage.setItem('userEmail', emailPrefix);
       }
 
       this.router.navigate(['/home']);

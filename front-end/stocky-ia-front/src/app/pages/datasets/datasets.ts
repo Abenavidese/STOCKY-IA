@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { OnInit } from '@angular/core';
+import { Prediction } from '../../services/prediction'
+import { MarkdownPipe } from '../../pipe/markdown.pipe';
 
 @Component({
   selector: 'app-datasets',
   standalone: true,
-  imports: [CommonModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, FormsModule, HttpClientModule, MarkdownPipe],
   templateUrl: './datasets.html',
   styleUrls: ['./datasets.scss']
 })
@@ -24,6 +25,14 @@ export class Datasets {
   fecha: string = '';
   resultado: string = '';
 
+  userEmailPrefix: string | null = null;
+
+  predictions: Prediction[] = [];
+  fechasUnicas: string[] = [];
+  productosPorFecha: Prediction[] = [];
+
+  fechaSeleccionada: string = '';
+  productoSeleccionado: number | null = null;
 
   minimized = false;
 
@@ -37,9 +46,11 @@ toggleMinimize() {
     if (uid) {
       this.productId = uid; // <-- Aquí se asigna globalmente
       console.log('UID asignado globalmente a productId:', this.productId);
+      this.loadPredictions(uid);
     } else {
       console.warn('No se encontró UID del usuario en AuthService.');
     }
+    this.userEmailPrefix = this.authService.getUserEmailPrefix();
   }
 
   // Propiedades para el menú flotante (chat)
@@ -54,7 +65,34 @@ toggleMinimize() {
   // Ahora mensajes como objetos { sender: 'user'|'assistant'|'system', text: string }
   messages: { sender: string; text: string }[] = [];
 
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService, private predictionService: Prediction) {}
+
+  loadPredictions(userId: string) {
+    this.predictionService.getPredictions(userId).subscribe(data => {
+      this.predictions = data;
+
+      // Extraer fechas únicas para el selector
+      const fechasSet = new Set(this.predictions.map(p => p.fecha));
+      this.fechasUnicas = Array.from(fechasSet).sort();
+
+      // Limpiar producto y fecha seleccionados al recargar
+      this.fechaSeleccionada = '';
+      this.productoSeleccionado = null;
+      this.productosPorFecha = [];
+    });
+  }
+
+  onFechaChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.fechaSeleccionada = selectElement.value;
+    this.productosPorFecha = this.predictions.filter(p => p.fecha === this.fechaSeleccionada);
+    this.productoSeleccionado = null;
+  }
+
+  onProductoChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.productoSeleccionado = Number(selectElement.value);
+  }
 
   // --- MÉTODO onPredict() ACTUALIZADO ---
   onPredict() {
@@ -106,6 +144,67 @@ toggleMinimize() {
     } else {
       this.resultado = 'Por favor, ingresa un ID de usuario y una fecha válida.';
     }
+  }
+
+  sendChatMessage() {
+    if (!this.productId || !this.fechaSeleccionada || !this.productoSeleccionado) {
+      alert('Por favor selecciona usuario, fecha y producto antes de enviar el mensaje.');
+      return;
+    }
+    if (!this.chatMessage.trim()) {
+      alert('Escribe un mensaje antes de enviar.');
+      return;
+    }
+
+    // Buscar la predicción/contexto que corresponde a la fecha y producto seleccionados
+    const contexto = this.predictions.find(
+      p => p.fecha === this.fechaSeleccionada && p.product_id === this.productoSeleccionado
+    );
+
+    if (!contexto) {
+      alert('No se encontró la predicción seleccionada.');
+      return;
+    }
+
+    // Preparar payload para el backend chat
+    const payload = {
+      userId: this.productId,
+      username: this.userEmailPrefix || '',  // o cualquier otro username que tengas
+      productId: contexto.product_id,
+      productName: contexto.product_name,
+      fecha: this.fechaSeleccionada,
+      message: this.chatMessage,
+      contexto: {
+        productName: contexto.product_name,
+        categoryId: contexto.category_id,
+        categoryName: contexto.category_name,
+        prediccion: contexto.prediccion,
+        ventaAnterior: contexto.venta_anterior,
+        priceUsd: contexto.price_usd,
+        createdAt: contexto.created_at,
+        historico: contexto.historico,
+      }
+    };
+
+    const chatApiUrl = 'http://localhost:8001/api/chat/message'; // Ajusta URL si necesario
+
+    // Enviar mensaje al backend chat
+    this.http.post<any>(chatApiUrl, payload).subscribe({
+      next: (res) => {
+        console.log('Respuesta del chat:', res);
+
+        // Guardar respuesta en el array de mensajes para mostrar en UI
+        this.messages.push({ sender: 'user', text: this.chatMessage });
+        this.messages.push({ sender: 'assistant', text: res.response });
+
+        // Limpiar input
+        this.chatMessage = '';
+      },
+      error: (err) => {
+        console.error('Error enviando mensaje al chat:', err);
+        alert('Error al enviar mensaje al chat');
+      }
+    });
   }
 
   // --- El resto de tus métodos (sin cambios) ---
@@ -170,108 +269,6 @@ toggleMinimize() {
           }
         });
     }, 3000);
-  }
-
-  loadConversation() {
-    const threadId = localStorage.getItem('thread_id');
-    if (threadId) {
-      this.http.get<any>(`http://127.0.0.1:8001/api/conversation/${threadId}`)
-        .subscribe({
-          next: res => {
-            this.messages = res.conversation_history.map((m: any) => ({
-              sender: m.role === 'user' ? 'user' : 'assistant',
-              text: m.content
-            }));
-          },
-          error: err => {
-            console.error('Error al cargar conversación:', err);
-            this.messages = [];
-          }
-        });
-    }
-  }
-
-  sendMessage() {
-    if (this.productId.trim() && this.productName.trim() && this.chatMessage.trim()) {
-
-      const productData = {
-        product_id: this.productId,
-        product_name: this.productName,
-      };
-
-      this.http.post('http://127.0.0.1:8000/api/products', productData).subscribe({
-        next: () => {
-          // Producto creado o validado correctamente
-          this.sendChatMessage();
-        },
-        error: (err) => {
-          if (err.status === 400) {
-            // Mostrar mensaje de error claro y NO enviar mensaje al chat
-            this.messages.push({ sender: 'system', text: `Error al crear producto: ${err.error.detail}` });
-          } else {
-            console.error('Error al crear producto:', err);
-            this.messages.push({ sender: 'system', text: 'Error inesperado al crear producto.' });
-          }
-        }
-      });
-
-    } else {
-      this.messages.push({ sender: 'system', text: 'Por favor, ingresa todos los campos (ID, nombre del producto y mensaje).' });
-    }
-  }
-
-
-  private sendChatMessage() {
-    const messageData = {
-      userId: localStorage.getItem('userId') || '',
-      username: localStorage.getItem('username') || '',
-      productId: this.productId,
-      productName: this.productName,
-      message: this.chatMessage,
-    };
-
-    this.messages.push({ sender: 'user', text: `Producto ${this.productName} (ID: ${this.productId}): ${this.chatMessage}` });
-
-    this.chatMessage = '';
-
-    this.http.post<any>('http://127.0.0.1:8000/api/chat/', messageData)
-      .subscribe({
-        next: response => {
-          // Guardar thread_id para la conversación
-          const threadId = response.chat_backend_response?.thread_id || response.thread_id;
-          if (threadId) {
-            localStorage.setItem('thread_id', threadId);
-          }
-
-          const assistantResponse = response.chat_backend_response?.response || response.response || 'No hay respuesta';
-          this.messages.push({ sender: 'assistant', text: assistantResponse });
-        },
-        error: err => {
-          console.error('Error al enviar el mensaje:', err);
-          this.messages.push({ sender: 'system', text: 'Error al enviar el mensaje.' });
-        }
-      });
-  }
-
-
-  sendToApi(messageData: any) {
-    this.http.post<any>('http://127.0.0.1:8000/api/chat/', messageData)
-      .subscribe({
-        next: response => {
-          // Guardar thread_id para la conversación
-          const threadId = response.chat_backend_response?.thread_id || response.thread_id;
-          if (threadId) {
-            localStorage.setItem('thread_id', threadId);
-          }
-
-          const assistantResponse = response.chat_backend_response?.response || response.response || 'No hay respuesta';
-          this.messages.push({ sender: 'assistant', text: assistantResponse });
-        },
-        error: err => {
-          console.error('Error al enviar el mensaje:', err);
-          this.messages.push({ sender: 'system', text: 'Error al enviar el mensaje.' });
-        }
-      });
   }
 
   startDrag(event: MouseEvent | TouchEvent) {

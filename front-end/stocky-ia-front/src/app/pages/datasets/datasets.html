@@ -71,7 +71,7 @@
      (touchstart)="startDrag($event)">
 
   <div class="chat-header">
-    <span>💬 Chat</span>
+    <p>💬 Chat-Box</p>
     <div class="chat-controls">
       <button (click)="toggleMinimize()">
         {{ minimized ? '🔼' : '🔽' }}
@@ -82,12 +82,31 @@
 
   <div *ngIf="!minimized" class="chat-content">
     <div class="chat-body" #chatBody>
+      <p>Bienvenido, {{ userEmailPrefix }}</p>
       <div *ngFor="let message of messages" class="message" [ngClass]="message.sender">
-        <p>{{ message.text }}</p>
+        <div [innerHTML]="message.text | markdown"></div>
       </div>
     </div>
 
     <div class="chat-footer">
+      <div class="selects-row">
+        <div>
+          <label>Fecha:</label>
+          <select (change)="onFechaChange($event)" [value]="fechaSeleccionada">
+            <option value="" disabled>Seleccione una fecha</option>
+            <option *ngFor="let fecha of fechasUnicas" [value]="fecha">{{ fecha }}</option>
+          </select>
+        </div>
+
+        <div *ngIf="fechaSeleccionada">
+          <label>Producto:</label>
+          <select (change)="onProductoChange($event)" [value]="productoSeleccionado">
+            <option value="" disabled>Seleccione un producto</option>
+            <option *ngFor="let p of productosPorFecha" [value]="p.product_id">{{ p.product_name }}</option>
+          </select>
+        </div>
+      </div>
+
       <textarea
         [(ngModel)]="chatMessage"
         placeholder="Escribe un mensaje..."
@@ -95,7 +114,7 @@
         class="input-field"
         required
       ></textarea>
-      <button (click)="sendMessage()">Enviar</button>
+      <button (click)="sendChatMessage()">Enviar</button>
     </div>
   </div>
 </div>
