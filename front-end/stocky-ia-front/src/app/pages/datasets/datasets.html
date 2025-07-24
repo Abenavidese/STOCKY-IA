@@ -39,14 +39,7 @@
 
   <form class="predict-form" (submit)="onPredict(); $event.preventDefault()">
     <div class="form-row">
-      <input
-        type="text"
-        placeholder="ID del usuario"
-        title="Campo en desarrollo"
-        [(ngModel)]="productId"
-        name="productId"
-        required
-      />
+      
       <input
         type="date"
         [(ngModel)]="fecha"
