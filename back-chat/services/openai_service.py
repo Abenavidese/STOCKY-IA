@@ -2,13 +2,12 @@ from openai import OpenAI
 import os
 import logging
 from dotenv import load_dotenv
+from httpx import HTTPStatusError
 
-# Cargar las variables de entorno desde el archivo .env
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 
-# Obtener la clave de API desde las variables de entorno
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     logger.error("OPENAI_API_KEY no está configurada")
@@ -16,7 +15,7 @@ if not api_key:
 
 client = OpenAI(api_key=api_key)
 
-def get_openai_response(messages: list, model="gpt-3.5-turbo", max_tokens=300, temperature=0.7):
+def get_openai_response(messages: list, model="gpt-4o-mini", max_tokens=600, temperature=0.7):
     try:
         response = client.chat.completions.create(
             model=model,
@@ -25,6 +24,12 @@ def get_openai_response(messages: list, model="gpt-3.5-turbo", max_tokens=300, t
             temperature=temperature,
         )
         return response.choices[0].message.content
+    except HTTPStatusError as e:
+        if e.response.status_code == 429:
+            logger.error(f"Límite de cuota alcanzado: {e.response.text}")
+            return "Error: Se ha alcanzado el límite de cuota de OpenAI. Por favor, inténtalo más tarde."
+        else:
+            raise
     except Exception as e:
-        logger.error(f"Error en OpenAI: {e}")
+        logger.error(f"Error inesperado: {e}")
         raise
