@@ -11,12 +11,5 @@ import { Auth, signOut } from '@angular/fire/auth';
 export class Topbar {
   constructor(private auth: Auth, private router: Router) {}
 
-  async logout() {
-    try {
-      await signOut(this.auth);
-      this.router.navigate(['/login']);
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error);
-    }
-  }
+  
 }

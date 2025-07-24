@@ -1,113 +1,86 @@
 .politicas-container {
   max-width: 1000px;
-  margin: 4rem auto;
-  padding: 3rem 2.5rem;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(10px);
+  margin: 3rem auto;
+  padding: 2.5rem;
+  background: #0f172a; /* Fondo oscuro elegante */
   border-radius: 16px;
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
-  font-family: 'Segoe UI', Roboto, sans-serif;
-  color: #2c3e50;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+  font-family: 'Poppins', sans-serif;
+  color: #e2e8f0; /* Texto claro */
   animation: fadeSlideIn 0.8s ease;
 
   h1 {
     text-align: center;
-    font-size: 2.8rem;
+    font-size: 2.6rem;
     font-weight: 700;
-    color: #1e2f97;
-    margin-bottom: 2.5rem;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    color: #f8fafc; /* Blanco puro */
+    margin-bottom: 2rem;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+    letter-spacing: 0.5px;
   }
 
   section {
-    margin-bottom: 2.5rem;
-    background-color: #f5f7fe;
-    padding: 1.5rem 2rem;
-    border-left: 6px solid #3f51b5;
-    border-radius: 12px;
-    box-shadow: 0 6px 20px rgba(63, 81, 181, 0.08);
-    transition: transform 0.3s ease;
+    margin-bottom: 1.8rem;
+    background: #1e293b; /* Card oscura */
+    padding: 1.3rem 1.8rem;
+    border-left: 5px solid #3b82f6; /* Azul acento */
+    border-radius: 10px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
     }
 
     h2 {
-      font-size: 1.6rem;
+      font-size: 1.5rem;
       font-weight: 600;
-      margin-bottom: 0.75rem;
-      color: #1a237e;
+      margin-bottom: 0.5rem;
+      color: #f1f5f9; /* Blanco opaco */
+      text-shadow: 0 0 6px rgba(255, 255, 255, 0.2);
     }
 
-    p {
-      font-size: 1.05rem;
-      line-height: 1.7;
-      color: #444;
+    p, li {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: #cbd5e1;
     }
 
     ul {
       margin-top: 0.5rem;
       padding-left: 1.5rem;
-
-      li {
-        font-size: 1rem;
-        color: #555;
-        line-height: 1.6;
-        list-style: disc;
-      }
     }
 
     a {
-      color: #3f51b5;
+      color: #93c5fd;
       text-decoration: underline;
       font-weight: 500;
 
       &:hover {
-        color: #1a237e;
-        text-shadow: 0 0 4px rgba(26, 35, 126, 0.2);
+        color: #3b82f6;
+        text-shadow: 0 0 4px rgba(59, 130, 246, 0.3);
       }
     }
   }
 
   .legal-footer {
     text-align: center;
-    margin-top: 3rem;
-    font-size: 0.95rem;
-    color: #666;
+    margin-top: 2.5rem;
+    font-size: 0.9rem;
+    color: #94a3b8;
     padding-top: 1rem;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid #334155;
   }
 }
 
 @keyframes fadeSlideIn {
   0% {
     opacity: 0;
-    transform: translateY(40px);
+    transform: translateY(30px);
   }
   100% {
     opacity: 1;
     transform: translateY(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .politicas-container {
-    padding: 2rem 1rem;
-
-    h1 {
-      font-size: 2rem;
-    }
-
-    section {
-      padding: 1rem 1.2rem;
-
-      h2 {
-        font-size: 1.3rem;
-      }
-
-      p, ul li {
-        font-size: 0.95rem;
-      }
-    }
   }
 }

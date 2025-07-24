@@ -1,9 +1,40 @@
-<aside class="sidebar">
-  <h2>Menú</h2>
-  <ul>
-    <li><a routerLink="/home/inicio" routerLinkActive="active">Inicio</a></li>
-    <li><a routerLink="/home/politicas" routerLinkActive="active">Política</a></li>
-    <li><a routerLink="/home/ajustes" routerLinkActive="active">Ajustes</a></li>
-    <li><a routerLink="/home/datasets" routerLinkActive="active">Datasets</a></li>
+<div class="menu" [class.closed]="menuClosed">
+  <ul class="menu-content">
+    <li>
+      <a routerLink="/home/inicio" routerLinkActive="active">
+        <span class="material-symbols-outlined">home</span>
+        <span>Inicio</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/home/politicas" routerLinkActive="active">
+        <span class="material-symbols-outlined">description</span>
+        <span>Política</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/home/ajustes" routerLinkActive="active">
+        <span class="material-symbols-outlined">settings</span>
+        <span>Ajustes</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/home/datasets" routerLinkActive="active">
+        <span class="material-symbols-outlined">database</span>
+        <span>Datasets</span>
+      </a>
+    </li>
+    <li>
+      <a routerLink="/home/contact" routerLinkActive="active">
+        <span class="material-symbols-outlined">mail</span>
+        <span>Contacto</span>
+      </a>
+    </li>
+    <li>
+      <button class="logout-btn" (click)="logout()">
+        <span class="material-symbols-outlined">logout</span>
+        <span>Salir</span>
+      </button>
+    </li>
   </ul>
-</aside>
+</div>

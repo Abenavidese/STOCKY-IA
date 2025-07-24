@@ -1,17 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { Auth, signOut } from '@angular/fire/auth';
 
 @Component({
   selector: 'app-sidebar',
-imports: [CommonModule, RouterModule],
+  standalone: true,
+  imports: [CommonModule, RouterModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss'
 })
 export class Sidebar {
-  isClosed = false;
+  menuClosed = false;
 
-  toggleSidebar() {
-    this.isClosed = !this.isClosed;
+  constructor(private router: Router, private auth: Auth) {}
+
+  toggleMenu() {
+    this.menuClosed = !this.menuClosed;
+  }
+
+  async logout() {
+    try {
+      await signOut(this.auth);
+      localStorage.removeItem('uid'); 
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.error('Error al cerrar sesión:', error);
+    }
   }
 }

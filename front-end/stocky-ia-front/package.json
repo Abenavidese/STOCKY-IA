@@ -30,6 +30,7 @@
     "@angular/platform-server": "^20.0.0",
     "@angular/router": "^20.0.0",
     "@angular/ssr": "^20.0.5",
+    "@fortawesome/fontawesome-free": "^7.0.0",
     "aos": "^2.3.4",
     "express": "^5.1.0",
     "firebase": "^11.10.0",
