@@ -1,0 +1,51 @@
+<div class="main-title">
+  <h2>GRÁFICAS DE ANÁLISIS</h2>
+</div>
+
+<div class="main-cards">
+  <div class="card">
+    <div class="card-inner">
+      <h3>VENTAS TOTALES</h3>
+      <span class="material-symbols-outlined">attach_money</span>
+    </div>
+    <h1>{{ analyticsData.ventas_totales_usd | currency:'USD' }}</h1>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+      <h3>PRODUCTO TOP</h3>
+      <span class="material-symbols-outlined">star</span>
+    </div>
+    <h1>{{ analyticsData.producto_top }}</h1>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+      <h3>MENOS CONSUMIDO</h3>
+      <span class="material-symbols-outlined">trending_down</span>
+    </div>
+    <h1>{{ productoMenosConsumido }}</h1>
+  </div>
+</div>
+
+<div class="charts">
+  <div class="charts-card">
+    <h2 class="chart-title">Ventas por Categoría</h2>
+    <div id="ventas-categoria"></div>
+  </div>
+
+  <div class="charts-card">
+    <h2 class="chart-title">Top Productos</h2>
+    <div id="top-productos"></div>
+  </div>
+
+  <div class="charts-card">
+    <h2 class="chart-title">Productos Menos Consumidos</h2>
+    <div id="productos-menos"></div>
+  </div>
+
+  <div class="charts-card">
+    <h2 class="chart-title">Ventas en el Tiempo</h2>
+    <div id="ventas-tiempo"></div>
+  </div>
+</div>

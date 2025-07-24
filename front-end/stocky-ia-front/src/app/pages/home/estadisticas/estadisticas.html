@@ -1,0 +1,81 @@
+<div class="main-title">
+  <h2>PANEL DE PREDICCIONES</h2>
+</div>
+
+<div class="main-cards">
+  <div class="card">
+    <div class="card-inner">
+      <h3>TOTAL PREDICCIONES</h3>
+      <span class="material-symbols-outlined">analytics</span>
+    </div>
+    <h1>{{ predictions.length }}</h1>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+      <h3>CATEGORÍAS</h3>
+      <span class="material-symbols-outlined">category</span>
+    </div>
+    <h1>{{ categories.length }}</h1>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+      <h3>PRODUCTOS</h3>
+      <span class="material-symbols-outlined">inventory_2</span>
+    </div>
+    <h1>{{ products.length }}</h1>
+  </div>
+
+  <div class="card">
+    <div class="card-inner">
+      <h3>TOTAL DINERO</h3>
+      <span class="material-symbols-outlined">payments</span>
+    </div>
+    <h1>{{ totalDinero | currency:'USD':'symbol':'1.2-2' }}</h1>
+  </div>
+</div>
+
+<!-- Filtros -->
+<div class="filters-container">
+  <label for="category">Categoría:</label>
+  <select id="category" [(ngModel)]="selectedCategory" (change)="filterData()">
+    <option value="">Todas</option>
+    <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+  </select>
+
+  <label for="product">Producto:</label>
+  <select id="product" [(ngModel)]="selectedProduct" (change)="filterData()">
+    <option value="">Todos</option>
+    <option *ngFor="let prod of products" [value]="prod">{{ prod }}</option>
+  </select>
+
+  <button class="reset-btn" (click)="resetFilters()">Resetear Filtros</button>
+</div>
+
+<!-- Tabla -->
+<div class="charts-card">
+  <h2 class="chart-title">Predicciones</h2>
+  <table class="predictions-table">
+    <thead>
+      <tr>
+        <th>Fecha</th>
+        <th>Producto</th>
+        <th>Categoría</th>
+        <th>Predicción</th>
+        <th>Venta Anterior</th>
+        <th>Precio (USD)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let p of filteredPredictions">
+        <td>{{ p.fecha }}</td>
+        <td>{{ p.product_name }}</td>
+        <td>{{ p.category_name }}</td>
+        <td>{{ p.prediccion | number:'1.2-2' }}</td>
+        <td>{{ p.venta_anterior | number:'1.0-0' }}</td>
+        <td>{{ p.price_usd | currency:'USD':'symbol':'1.2-2' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
