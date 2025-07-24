@@ -61,8 +61,17 @@ export class Login {
       const uid = userCredential.user?.uid;
       const email = userCredential.user?.email;
 
-      if (uid) localStorage.setItem('userUID', uid);
-      if (email) localStorage.setItem('userEmail', email);
+      console.log('UID del usuario logueado:', uid);
+      console.log('Email del usuario logueado:', email);
+
+      // Guardar UID y Email en localStorage
+      if (uid) {
+        localStorage.setItem('userUID', uid);
+      }
+      if (email) {
+        const emailPrefix = email.split('@')[0];
+        localStorage.setItem('userEmail', emailPrefix);
+      }
 
       this.router.navigate(['/home']);
     } catch (error: any) {

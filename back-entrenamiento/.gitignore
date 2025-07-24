@@ -13,6 +13,7 @@ venv/
 .venv/
 **/venv/
 **/.venv/
+venvEntre
 
 # Archivos temporales y de entorno
 *.log

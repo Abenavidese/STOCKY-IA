@@ -20,7 +20,8 @@ export class AuthService {
         // Guardar en localStorage
         localStorage.setItem('userUID', this.currentUid);
         if (this.currentEmail) {
-          localStorage.setItem('userEmail', this.currentEmail);
+          const emailPrefix = this.currentEmail.split('@')[0];
+          localStorage.setItem('userEmail', emailPrefix);
         }
       } else {
         this.currentUid = null;
@@ -43,6 +44,11 @@ export class AuthService {
     return this.currentEmail || localStorage.getItem('userEmail');
   }
 
+  getUserEmailPrefix(): string | null {
+    return localStorage.getItem('userEmail');
+  }
+
+  // Cerrar sesión  asdasdasdasdasdas
   async logout() {
     await signOut(this.auth);
     localStorage.removeItem('userUID');
