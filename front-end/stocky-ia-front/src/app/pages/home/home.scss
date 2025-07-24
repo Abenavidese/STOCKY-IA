@@ -1,8 +1,16 @@
+:host {
+  display: block;
+  background-color: #0a0a0a; /* Fondo negro para todo el contenedor principal */
+  height: 100vh;
+  width: 100%;
+}
+
+
+/* Main content con margen a la izquierda */
 :host ::ng-deep .main-content {
-  margin-left: 250px; 
+  margin-left: 250px;
   padding: 1.5rem;
   padding-top: 60px;
-  min-height: calc(100vh - 60px);
-  background-color: #ffffff;
-  
+  min-height: 100vh;          /* Cubre toda la altura de la pantalla */
+  background-color: #0a0a0a;  /* Fondo negro */
 }
