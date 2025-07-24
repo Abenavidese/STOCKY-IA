@@ -10,6 +10,7 @@ from api.router_user import router as user_router
 from api.router_products import router as product_router
 from fastapi.staticfiles import StaticFiles
 from api.prediction_router import router as prediction_router
+from api.tasks_router import tasks_router
 import os
 import json
 
@@ -40,6 +41,7 @@ app.include_router(chat_router, prefix="/api/chat", tags=["Chat"])
 app.include_router(user_router, prefix="/user", tags=["User"])
 app.include_router(product_router, prefix="/api")
 app.include_router(prediction_router, prefix="/api", tags=["Prediction Reports"])
+app.include_router(tasks_router, prefix="/api/tasks", tags=["Tasks"])
 
 
 
@@ -49,15 +51,6 @@ app.mount("/uploads", StaticFiles(directory=UPLOAD_DIR), name="uploads")
 @app.get("/")
 def read_root():
     return {"message": "Bienvenido a la API de entrenamiento"}
-
-@app.get("/api/task-status/{task_id}")
-def get_task_status(task_id: str):
-    result = AsyncResult(task_id, app=celery_app)
-    return {
-        "task_id": task_id,
-        "status": result.status,
-        "result": result.result
-    }
 
 @app.get("/api/chat/messages")
 async def get_messages():

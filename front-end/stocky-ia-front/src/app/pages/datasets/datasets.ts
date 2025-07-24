@@ -1,7 +1,9 @@
 import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../services/auth';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-datasets',
@@ -29,6 +31,17 @@ toggleMinimize() {
   this.minimized = !this.minimized;
 }
 
+  ngOnInit(): void {
+    // Obtener UID al iniciar el componente
+    const uid = this.authService.getUid();
+    if (uid) {
+      this.productId = uid; // <-- Aquí se asigna globalmente
+      console.log('UID asignado globalmente a productId:', this.productId);
+    } else {
+      console.warn('No se encontró UID del usuario en AuthService.');
+    }
+  }
+
   // Propiedades para el menú flotante (chat)
   posX = 100;
   posY = 100;
@@ -41,7 +54,7 @@ toggleMinimize() {
   // Ahora mensajes como objetos { sender: 'user'|'assistant'|'system', text: string }
   messages: { sender: string; text: string }[] = [];
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: AuthService) {}
 
   // --- MÉTODO onPredict() ACTUALIZADO ---
   onPredict() {
@@ -112,10 +125,18 @@ toggleMinimize() {
   }
 
   onUpload() {
+    const uid = this.authService.getUid();
+    if (!uid) {
+      console.error('No se encontró UID del usuario.');
+      return;
+    }
+
     if (this.selectedFile) {
       const formData = new FormData();
       formData.append('file', this.selectedFile);
-      formData.append('user_id', '2'); // O usa this.productId si aplica
+      formData.append('user_id', uid);
+      console.log('Subiendo archivo con user_id:', uid);
+
       this.http.post<{ task_id: string }>('http://127.0.0.1:8000/api/datasets/upload', formData)
         .subscribe({
           next: (res) => {
@@ -133,7 +154,7 @@ toggleMinimize() {
 
   pollTaskStatus(taskId: string) {
     const interval = setInterval(() => {
-      this.http.get<any>(`http://127.0.0.1:8000/api/task-status/${taskId}`)
+      this.http.get<any>(`http://127.0.0.1:8000/api/tasks/task-status/${taskId}`)
         .subscribe({
           next: (res) => {
             this.status = res.status;
