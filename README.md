@@ -52,9 +52,9 @@ Conecta con **OpenAI** para explicar las predicciones, dar contexto sobre las te
 ---
 
 ## ✍️ Autores  
-- **Anthony** – Project Manager  
-- **Bryam** – Frontend Developer  
-- **Erick** – Chatbot Developer  
-- **Henry** – Backend Developer  
+- **Anthony Benavides** – Project Manager  
+- **Bryam Peralta** – Frontend Developer  
+- **Erick Zhigue** – Chatbot Developer  
+- **Henry Granda** – Backend Developer  
 
 
