@@ -19,8 +19,10 @@ export class Estadisticas implements OnInit {
 
   categories: string[] = [];
   products: string[] = [];
+  dates: string[] = [];
   selectedCategory: string = '';
   selectedProduct: string = '';
+  selectedDate: string = '';
   totalDinero: number = 0;  
 
   constructor(
@@ -49,6 +51,7 @@ export class Estadisticas implements OnInit {
       this.filteredPredictions = [...this.predictions];
       this.categories = [...new Set(this.predictions.map(p => p.category_name))];
       this.products = [...new Set(this.predictions.map(p => p.product_name))];
+      this.dates = [...new Set(this.predictions.map(p => p.fecha.split('T')[0]))];
 
       this.calculateTotalDinero();  // <-- Calcula al inicio
 
@@ -60,7 +63,8 @@ export class Estadisticas implements OnInit {
   filterData(): void {
     this.filteredPredictions = this.predictions.filter(p =>
       (this.selectedCategory ? p.category_name === this.selectedCategory : true) &&
-      (this.selectedProduct ? p.product_name === this.selectedProduct : true)
+      (this.selectedProduct ? p.product_name === this.selectedProduct : true) &&
+      (this.selectedDate ? p.fecha.split('T')[0] === this.selectedDate : true)
     );
     this.calculateTotalDinero();  // <-- recalcula
     this.renderCharts();

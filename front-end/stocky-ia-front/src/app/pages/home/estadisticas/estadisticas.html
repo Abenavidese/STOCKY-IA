@@ -38,6 +38,12 @@
 
 <!-- Filtros -->
 <div class="filters-container">
+ <label for="date">Fecha:</label>
+ <select id="date" [(ngModel)]="selectedDate" (change)="filterData()">
+    <option value="">Todas</option>
+    <option *ngFor="let d of dates" [value]="d">{{ d }}</option>
+ </select>
+
   <label for="category">Categoría:</label>
   <select id="category" [(ngModel)]="selectedCategory" (change)="filterData()">
     <option value="">Todas</option>
