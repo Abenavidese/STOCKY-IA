@@ -7,7 +7,8 @@
   <div class="hero" data-aos="fade-left" data-aos-duration="1000">
     <h2>¿Qué hace StockyIA?</h2>
     <p>
-      Una plataforma inteligente para predecir la demanda de productos, reducir pérdidas y mejorar decisiones en empresas retail.
+      Una plataforma inteligente para predecir la demanda de productos,
+      reducir pérdidas y mejorar decisiones en empresas retail.
     </p>
   </div>
 
@@ -28,12 +29,18 @@
 
   <h2 class="team-title" data-aos="fade-up" data-aos-duration="800">Equipo Desarrollador</h2>
   <div class="team">
-    <div class="team-card" data-aos="zoom-in" data-aos-delay="0" data-aos-duration="800">
+    <div
+      class="team-card"
+      *ngFor="let integrante of listaIntegrantes; let i = index"
+      [attr.data-aos-delay]="i * 100"
+      data-aos="zoom-in"
+      data-aos-duration="800"
+    >
       <div class="card-inner">
         <div class="card-front">
-          <img src="assets/images/3.jpg" alt="Anthony Benavides" class="team-photo" />
-          <h4>Anthony Benavides</h4>
-          <p>Project Manager</p>
+          <img [src]="integrante.foto" [alt]="integrante.nombre" class="team-photo" />
+          <h4>{{ integrante.nombre }}</h4>
+          <p>{{ integrante.rol }}</p>
         </div>
         <div class="card-back">
           <h4>Anthony Benavides</h4>
@@ -80,6 +87,8 @@
         <div class="card-back">
           <h4>Henry Granda</h4>
           <p>Henry nació en Cuenca el 18 de enero del 2003. Estudia Computación en la Universidad Politécnica Salesiana.</p>
+          <h4>{{ integrante.nombre }}</h4>
+          <p>{{ integrante.texto }}</p>
         </div>
       </div>
     </div>

@@ -10,25 +10,26 @@
 }
 
 html, body {
-  background: #ecf0f3;
+  background: linear-gradient(180deg, #000000, #0a1b2a);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #fff;
 }
 
 h2 {
   text-align: center;
-  color: #333;
+  color: #fff;
 }
 
 .custom-form {
   min-width: 300px;
   max-width: 500px;
   margin: 0 auto;
-  background-color: #ecf0f3;
+  background-color: #0a1b2a;
   border-radius: 2.5rem;
   padding: 2rem 3rem;
-  box-shadow: 13px 13px 20px #cbced1, -13px -13px 20px #ffffff;
+  box-shadow: 8px 8px 15px rgba(0,0,0,0.8), -5px -5px 12px rgba(255,255,255,0.05);
   margin-top: 4rem;
-  color: #333;
+  color: #fff;
   text-align: center;
 
   input[type='file'] {
@@ -38,11 +39,11 @@ h2 {
     padding: 1rem;
     border-radius: 0.5rem;
     border: none;
-    background: #ebf5fc;
-    box-shadow: inset -5px -5px 15px rgba(255, 255, 255, 0.8),
-                inset 5px 5px 10px rgba(0, 0, 0, 0.1);
+    background: #111;
+    box-shadow: inset -3px -3px 10px rgba(255,255,255,0.05),
+                inset 3px 3px 10px rgba(0,0,0,0.7);
     font-size: 1rem;
-    color: #333;
+    color: #fff;
   }
 
   button {
@@ -51,21 +52,21 @@ h2 {
     font-size: 0.875rem;
     font-weight: bold;
     color: #ffffff;
-    background-color: #bcd8c1;
+    background-color: #4a6cf7;
     width: 100%;
     padding: 0.875rem 1rem;
     border: none;
     border-radius: 1.5rem;
-    box-shadow: 3px 3px 8px #b1b1b1, -3px -3px 8px #ffffff;
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.7), -3px -3px 8px rgba(255,255,255,0.05);
     cursor: pointer;
     transition: background-color 0.3s ease;
 
     &:hover {
-      background-color: #a5c3ac;
+      background-color: #3657d4;
     }
 
     &:disabled {
-      background-color: #ccc;
+      background-color: #333;
       cursor: not-allowed;
     }
   }
@@ -76,18 +77,18 @@ h2 {
   margin: 2rem auto;
   padding: 1.5rem;
   border-radius: 1rem;
-  background-color: #f9f9f9;
-  box-shadow: inset 2px 2px 5px #d1d9de, inset -2px -2px 5px #ffffff;
+  background-color: #111;
+  box-shadow: inset 2px 2px 5px rgba(255,255,255,0.05), inset -2px -2px 5px rgba(0,0,0,0.7);
 
   h3 {
     margin-bottom: 0.5rem;
     font-size: 1rem;
-    color: #444;
+    color: #fff;
   }
 
   p {
     font-weight: 500;
-    color: #222;
+    color: #ccc;
   }
 }
 
@@ -101,40 +102,54 @@ h2 {
   }
 
   .success {
-    color: green;
+    color: #43e97b;
   }
 
   .failure {
-    color: red;
+    color: #ff4e4e;
   }
 }
 
 pre {
-  background-color: #fafafa;
+  background-color: #111;
   padding: 1rem;
   border-radius: 1rem;
   margin-top: 1rem;
   text-align: left;
   white-space: pre-wrap;
   word-break: break-word;
-  box-shadow: inset 2px 2px 5px #d1d9de, inset -2px -2px 5px #ffffff;
+  box-shadow: inset 2px 2px 5px rgba(255,255,255,0.05), inset -2px -2px 5px rgba(0,0,0,0.7);
+  color: #eee;
 }
 
 /* CHAT */
 .chat {
   position: fixed;
-  width: 380px;
-  height: 500px;
-  background: #fff;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  border-radius: 12px;
+  width: 550px;
+  height: 600px;
+  background: #0a1b2a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  border-radius: 16px;
   display: flex;
   flex-direction: column;
   user-select: none;
   overflow: hidden;
-  z-index: 9999;
+  z-index: 10000;
   font-family: 'Poppins', sans-serif;
-  transition: all 0.3s ease;
+  transition: width 0.35s ease, height 0.35s ease, box-shadow 0.35s ease;
+  border: 1px solid #333;
+}
+
+select {
+  width: auto;
+  min-width: 120px;
+  max-width: 100%;
+  padding: 6px 10px;
+  font-size: 14px;
+  box-sizing: border-box;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Contenedor que permite scroll del cuerpo sin empujar el footer */
@@ -142,7 +157,7 @@ pre {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-height: 0; /* 🔥 CORRECCIÓN CLAVE para evitar que el footer se desplace */
+  min-height: 0;
 }
 
 .chat.minimized {
@@ -156,7 +171,7 @@ pre {
 }
 
 .chat-header {
-  background: linear-gradient(90deg, #7494ec, #a6c6f2);
+  background: linear-gradient(90deg, #4a6cf7, #6f8efc);
   padding: 14px 20px;
   color: #fff;
   font-size: 20px;
@@ -181,7 +196,7 @@ pre {
   flex: 1;
   padding: 15px 20px;
   overflow-y: auto;
-  background-color: #f4f7fc;
+  background-color: #111;
   scroll-behavior: smooth;
 }
 
@@ -198,16 +213,16 @@ pre {
 
 /* Mensajes del usuario */
 .message.user {
-  background-color: #cce5ff;
-  color: #004085;
+  background-color: #4a6cf7;
+  color: #fff;
   margin-left: auto;
   border-bottom-right-radius: 0;
 }
 
 /* Mensajes del asistente */
 .message.assistant {
-  background-color: #d4edda;
-  color: #155724;
+  background-color: #43e97b;
+  color: #0a1b2a;
   margin-right: auto;
   border-bottom-left-radius: 0;
 }
@@ -215,21 +230,34 @@ pre {
 /* Footer fijo al fondo del chat */
 .chat-footer {
   padding: 15px 20px;
-  background-color: #f4f7fc;
+  background-color: #0a1b2a;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #333;
+}
+
+.selects-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+}
+
+.selects-row > div {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
 }
 
 .input-field {
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
   font-size: 14px;
   font-weight: 500;
-  color: #333;
+  color: #fff;
+  background-color: #111;
   resize: vertical;
 }
 
@@ -240,7 +268,7 @@ textarea.input-field {
 
 .chat-footer button {
   width: 100%;
-  background: #7494ec;
+  background: #4a6cf7;
   color: white;
   border: none;
   border-radius: 10px;
@@ -252,11 +280,11 @@ textarea.input-field {
 }
 
 .chat-footer button:hover {
-  background-color: #5b7fc4;
+  background-color: #3657d4;
 }
 
 .chat-footer button:active {
-  background-color: #4a68a1;
+  background-color: #2b4ca7;
 }
 
 .hidden {
@@ -289,11 +317,17 @@ textarea.input-field {
   padding: 10px;
   font-size: 16px;
   border-radius: 8px;
-  border: 1px solid #ccc;
+  border: 1px solid #333;
+  background-color: #111;
+  color: #fff;
+}
+
+.chat.wide-chat {
+  width: 380px;
 }
 
 .predict-form button {
-  background-color: #a6d6a6;
+  background-color: #43e97b;
   color: white;
   font-weight: bold;
   border: none;
@@ -304,6 +338,20 @@ textarea.input-field {
 }
 
 .predict-form button:hover {
-  background-color: #8bc98b;
+  background-color: #36c96a;
 }
 
+/* Loading Animation */
+.loading {
+  color: #43e97b;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 10px;
+  font-size: 1rem;
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}

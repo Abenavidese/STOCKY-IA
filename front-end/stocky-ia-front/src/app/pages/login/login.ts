@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -16,10 +16,14 @@ import {
   styleUrls: ['./login.scss'],
 })
 export class Login {
-  constructor(private router: Router, private auth: Auth) {}
+  constructor(
+    private router: Router,
+    private auth: Auth,
+    private cdr: ChangeDetectorRef
+  ) {}
 
-  // Estados del formulario
   isRegisterMode = false;
+  isLoading = false; // Loader animación
 
   // Campos de login
   loginEmail = '';
@@ -46,8 +50,13 @@ export class Login {
 
     if (!this.loginEmail || !this.loginPassword) {
       this.errorMessage = 'Por favor completa todos los campos.';
+      this.isLoading = false;
+      this.cdr.detectChanges();
       return;
     }
+
+    this.isLoading = true; // Mostrar animación de cargando
+    this.cdr.detectChanges();
 
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -56,7 +65,6 @@ export class Login {
         this.loginPassword
       );
 
-      // Obtener UID y Email
       const uid = userCredential.user?.uid;
       const email = userCredential.user?.email;
 
@@ -64,17 +72,19 @@ export class Login {
       console.log('Email del usuario logueado:', email);
 
       // Guardar UID y Email en localStorage
-      if (uid) {
-        localStorage.setItem('userUID', uid);
-      }
-      if (email) {
-        localStorage.setItem('userEmail', email);
-      }
+      if (uid) localStorage.setItem('userUID', uid);
+      if (email) localStorage.setItem('userEmail', email.split('@')[0]);
 
       this.router.navigate(['/home']);
     } catch (error: any) {
       console.error('Firebase error (login):', error.code, error.message);
       this.errorMessage = this.getFirebaseError(error.code);
+      this.isLoading = false; // Asegurar apagado
+      this.cdr.detectChanges();
+    } finally {
+      console.log('Login finalizado (éxito o error)');
+      this.isLoading = false;
+      this.cdr.detectChanges(); // Forzar actualización
     }
   }
 
@@ -86,13 +96,20 @@ export class Login {
 
     if (!this.registerUsername || !this.registerEmail || !this.registerPassword) {
       this.errorMessage = 'Por favor completa todos los campos.';
+      this.isLoading = false;
+      this.cdr.detectChanges();
       return;
     }
 
     if (this.registerPassword.length < 6) {
       this.errorMessage = 'La contraseña debe tener al menos 6 caracteres.';
+      this.isLoading = false;
+      this.cdr.detectChanges();
       return;
     }
+
+    this.isLoading = true; // Mostrar animación de cargando
+    this.cdr.detectChanges();
 
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -101,26 +118,30 @@ export class Login {
         this.registerPassword
       );
 
-      // Obtener UID y Email
       const uid = userCredential.user?.uid;
       const email = userCredential.user?.email;
 
-      console.log('UID del nuevo usuario registrado:', uid);
-      console.log('Email del nuevo usuario registrado:', email);
-
-      // Guardar UID y Email en localStorage
-      if (uid) {
-        localStorage.setItem('userUID', uid);
-      }
-      if (email) {
-        localStorage.setItem('userEmail', email);
-      }
+      if (uid) localStorage.setItem('userUID', uid);
+      if (email) localStorage.setItem('userEmail', email);
 
       alert('Registro exitoso');
+
+      // Limpiar campos y volver a login
+      this.registerUsername = '';
+      this.registerEmail = '';
+      this.registerPassword = '';
       this.toggleRegister(false);
+      this.isLoading = false;
+      this.cdr.detectChanges();
     } catch (error: any) {
       console.error('Firebase error (register):', error.code, error.message);
       this.errorMessage = this.getFirebaseError(error.code);
+      this.isLoading = false; // Asegurar apagado
+      this.cdr.detectChanges();
+    } finally {
+      console.log('Registro finalizado (éxito o error)');
+      this.isLoading = false;
+      this.cdr.detectChanges(); // Forzar actualización
     }
   }
 
