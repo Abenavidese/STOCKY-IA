@@ -46,7 +46,6 @@ def guardar_predicciones_en_db(df_pred, df_hist, user_id):
     db = get_db_session(user_id)
     try:
         for _, row in df_pred.iterrows():
-            # Buscar datos históricos de este producto y fecha
             hist_data = df_hist[
                 (df_hist['product_id'] == row['product_id']) &
                 (pd.to_datetime(df_hist['dt_target']).dt.date == pd.to_datetime(row['fecha']).date())
@@ -54,26 +53,41 @@ def guardar_predicciones_en_db(df_pred, df_hist, user_id):
 
             hist_row = hist_data.iloc[0].to_dict() if not hist_data.empty else {}
 
-            # Convertir Timestamps a string (ISO 8601)
             for key, value in hist_row.items():
                 if isinstance(value, pd.Timestamp):
                     hist_row[key] = value.strftime("%Y-%m-%d")
 
             hist_json = json.dumps(hist_row) if hist_row else None
 
-            pred = Prediccion(
+            # Verificar si ya existe predicción para este producto y fecha
+            existing_pred = db.query(Prediccion).filter_by(
                 user_id=user_id,
-                fecha=row['fecha'],
                 product_id=row['product_id'],
-                product_name=row.get('product_name', 'N/A'),
-                category_id=row.get('category_id', None),
-                category_name=row.get('category_name', 'N/A'),
-                prediccion=row['prediccion'],
-                venta_anterior=row.get('venta_anterior', None),
-                price_usd=row.get('price_usd', None),  # NUEVO
-                historico=hist_json
-            )
-            db.add(pred)
+                fecha=row['fecha']
+            ).first()
+
+            if existing_pred:
+                # Actualizamos en vez de duplicar
+                existing_pred.prediccion = row['prediccion']
+                existing_pred.venta_anterior = row.get('venta_anterior', None)
+                existing_pred.price_usd = row.get('price_usd', None)
+                existing_pred.historico = hist_json
+            else:
+                # Creamos nuevo registro
+                pred = Prediccion(
+                    user_id=user_id,
+                    fecha=row['fecha'],
+                    product_id=row['product_id'],
+                    product_name=row.get('product_name', 'N/A'),
+                    category_id=row.get('category_id', None),
+                    category_name=row.get('category_name', 'N/A'),
+                    prediccion=row['prediccion'],
+                    venta_anterior=row.get('venta_anterior', None),
+                    price_usd=row.get('price_usd', None),
+                    historico=hist_json
+                )
+                db.add(pred)
+
         db.commit()
     finally:
         db.close()
